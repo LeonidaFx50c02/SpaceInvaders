@@ -16,6 +16,12 @@ void run() {
     xR = 60;  // posizione iniziale x
     yR = IMM2D_HEIGHT - hR - 10;  // posizione iniziale y (in basso)
 
+    //proiettile
+    bool direzioneP = false;
+    int Width = 10;
+    int Height = 40;
+    int x = 320;
+    int y = IMM2D_HEIGHT - Height;
     while (true) {
         Clear(Yellow); // Pulisce lo schermo ad ogni ciclo
         DrawRectangle(0, 60, 640, 300, Green, Transparent); // parte nemici
@@ -51,7 +57,27 @@ void run() {
         wR2 = 30;
         hR2 = 20;
         navicelleNemiche(xR2, yR2, wR2, hR2);
-        // Aggiungi una pausa per evitare il sovraccarico della CPU (opzionale, dipende dalla libreria)
+
+        //proiettile
+
+
+        
+
+        char caratterePremuto2 = LastKey();
+        if (caratterePremuto2=='c')
+        {
+            direzioneP = true;
+            DrawRectangle(x, y, Width, Height, Black);
+            if (direzioneP)
+            {
+                y--;
+            }
+            else if (y == 0) {
+                direzioneP = false;
+            }
+        }
+        
+     
         Wait(10);  // Una pausa di 10 ms
     }
 }
