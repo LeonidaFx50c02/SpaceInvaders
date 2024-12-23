@@ -11,26 +11,30 @@ using namespace std;
 
 void run() {
 
-	int x = 0;
-
+	int xR, yR, wR, hR;
+	wR = 80;
+	hR = 40;
+	xR = 60;
+	yR = IMM2D_HEIGHT - hR;
 	Clear(Yellow);//parte navicella punti bonus
 	DrawRectangle(0, 60, 640, 300, Green, Transparent);//parte nemici
 	DrawRectangle(0, 360, 640, 60, Blue, Transparent);//parte difesa
-	DrawRectangle(0, 420, 640, 60, Red, Transparent);//parte mia navicella
+	DrawRectangle(0, 420, 640, 60, Red);//parte mia navicella
 	while (true) {
-		DrawRectangle(x, 450, 50, 30, Black, Transparent);//parte mia navicella
+		DrawRectangle(xR, yR, wR, hR, Black, Transparent);//parte mia navicella
 		char caratterePremuto = LastKey();
 		if (caratterePremuto == Left)
 		{
-			x -= 10;
+			xR -= 10;
+
 		}
 		else if (caratterePremuto == Right)
 		{
-			x += 10;
+			xR += 10;	
 		}
 
 	}
-
+	Wait(2);
 }
 
 
