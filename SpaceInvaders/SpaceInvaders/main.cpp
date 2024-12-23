@@ -21,6 +21,10 @@ void run() {
         DrawRectangle(0, 60, 640, 300, Green, Transparent); // parte nemici
         DrawRectangle(0, 360, 640, 60, Blue, Transparent); // parte difesa
         DrawRectangle(0, 420, 640, 60, Red); // parte navicella
+        DrawRectangle(48, 360, 100, 60, Black);//difesa1
+        DrawRectangle(196, 360, 100, 60, Black);//difesa2
+        DrawRectangle(344, 360, 100, 60, Black);//difesa3
+        DrawRectangle(492, 360, 100, 60, Black);//difesa4
 
         // Disegna la navetta
         DrawRectangle(xR, yR, wR, hR, Black, Transparent);
