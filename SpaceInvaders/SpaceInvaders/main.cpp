@@ -8,6 +8,7 @@
 using namespace std;
 
 void navicelleNemiche(int xR2, int  yR2, int wR2, int hR2);
+void difese(int xR3, int  yR3, int wR3, int hR3);
 
 void run() {
     int xR, yR, wR, hR;
@@ -21,10 +22,6 @@ void run() {
         DrawRectangle(0, 60, 640, 300, Green, Transparent); // parte nemici
         DrawRectangle(0, 360, 640, 60, Blue, Transparent); // parte difesa
         DrawRectangle(0, 420, 640, 60, Red); // parte navicella
-        DrawRectangle(48, 360, 100, 60, Black);//difesa1
-        DrawRectangle(196, 360, 100, 60, Black);//difesa2
-        DrawRectangle(344, 360, 100, 60, Black);//difesa3
-        DrawRectangle(492, 360, 100, 60, Black);//difesa4
 
         // Disegna la navetta
         DrawRectangle(xR, yR, wR, hR, Black, Transparent);
@@ -44,6 +41,15 @@ void run() {
                 xR = 640 - wR;  // Limite destro
             }
         }
+
+        //MURA DI DIFESA
+        int xR3, yR3, wR3, hR3;
+        xR3 = 50;
+        yR3 = 375;
+        wR3 = 100;
+        hR3 = 30;
+        difese(xR3, yR3, wR3, hR3);
+
         //NAVICELLE NEMICHE
         int xR2, yR2, wR2, hR2;
         xR2 = 10;
@@ -51,6 +57,7 @@ void run() {
         wR2 = 30;
         hR2 = 20;
         navicelleNemiche(xR2, yR2, wR2, hR2);
+
         // Aggiungi una pausa per evitare il sovraccarico della CPU (opzionale, dipende dalla libreria)
         Wait(10);  // Una pausa di 10 ms
     }
@@ -65,5 +72,11 @@ void navicelleNemiche(int xR2, int  yR2, int wR2, int hR2) {
             DrawRectangle(xR2, yR2, wR2, hR2, Red);
         }
     }
+}
 
+void difese(int xR3, int  yR3, int wR3, int hR3) {
+    for (int i = 0; i < 4; i++) {
+        DrawRectangle(xR3, yR3, wR3, hR3, Black);
+        xR3 += 150;
+    }
 }
