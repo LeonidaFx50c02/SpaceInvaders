@@ -24,4 +24,9 @@
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="navicella.png">
+      <Filter>File di origine</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

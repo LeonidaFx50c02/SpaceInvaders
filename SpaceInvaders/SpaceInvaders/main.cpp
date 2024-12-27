@@ -5,17 +5,30 @@
 #define IMM2D_IMPLEMENTATION
 #include "immediate2d.h"
 #include <string>
-using namespace std;
+#include <chrono>
+#include <thread>
 
+using namespace std;
+using namespace std::chrono;
+
+//Image navicella(const char navicella);
 void navicelleNemiche(int xR2, int  yR2, int wR2, int hR2);
 void difese(int xR3, int  yR3, int wR3, int hR3);
 
 void run() {
+    auto start = high_resolution_clock::now();
+    
+    bool limite = false;
+
     int xR, yR, wR, hR;
     wR = 80;  // larghezza navicella
     hR = 40;  // altezza navicella
     xR = 60;  // posizione iniziale x
     yR = IMM2D_HEIGHT - hR - 10;  // posizione iniziale y (in basso)
+    
+    int xR2 = 0, yR2 = 30, wR2, hR2;
+
+    int xR3, yR3, wR3, hR3;
 
     //proiettile
     bool direzioneP = false;
@@ -31,6 +44,7 @@ void run() {
 
         // Disegna la navetta
         DrawRectangle(xR, yR, wR, hR, Black, Transparent);
+        //Image navicella(const char navicella);
 
         // Controllo del tasto premuto per il movimento della navetta
         char caratterePremuto = LastKey();
@@ -48,8 +62,7 @@ void run() {
             }
         }
 
-        //MURA DI DIFESA
-        int xR3, yR3, wR3, hR3;
+        //MURA DI DIFESE
         xR3 = 50;
         yR3 = 375;
         wR3 = 100;
@@ -57,11 +70,26 @@ void run() {
         difese(xR3, yR3, wR3, hR3);
 
         //NAVICELLE NEMICHE
-        int xR2, yR2, wR2, hR2;
-        xR2 = 10;
-        yR2 = 30;
         wR2 = 30;
         hR2 = 20;
+        auto now = high_resolution_clock::now();
+        auto elapsed = duration_cast<seconds>(now - start).count();
+        if (elapsed % 2 == 0) {
+            for (int i = 0; i < 2; i++) {
+                if (xR2 > 100) {
+                    limite = true;
+                }
+                if (limite == true) {
+                    xR2--;
+                }
+                if (xR2 < 0) {
+                    limite = false;
+                }
+                if (limite == false) {
+                    xR2++;
+                }
+            }
+        }
         navicelleNemiche(xR2, yR2, wR2, hR2);
 
         //PROIETTILE
@@ -84,12 +112,12 @@ void run() {
 
 void navicelleNemiche(int xR2, int  yR2, int wR2, int hR2) {
     for (int i = 0; i < 4; i++) {
-        xR2 = 10;
         yR2 += 30;
         for (int i = 0; i < 10; i++) {
-            xR2 += 55;
             DrawRectangle(xR2, yR2, wR2, hR2, Red);
+            xR2 += 55;
         }
+        xR2 -= 550;
     }
 }
 
