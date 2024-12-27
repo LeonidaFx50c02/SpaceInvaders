@@ -41,6 +41,7 @@ void run() {
     int Height = 40;
     int x = 320;
     int y = IMM2D_HEIGHT - Height;
+    bool sparato = false;
     while (true) {
         Clear(Yellow); // Pulisce lo schermo ad ogni ciclo
         DrawRectangle(0, 60, 640, 300, Green, Transparent); // parte nemici
@@ -91,16 +92,20 @@ void run() {
 
         //PROIETTILE
         char caratterePremuto2 = LastBufferedKey();
-        if (caratterePremuto2 == 'c')
-        {
-            direzioneP = true;
-            DrawRectangle((xR + (wR / 2)), y, Width, Height, Black);
-            if (direzioneP)
-            {
-                y--;
-            }
-            else if (y == 0) {
-                direzioneP = false;
+        if (caratterePremuto2 == 'c' && !sparato) {
+            sparato = true;
+            y = IMM2D_HEIGHT - Height;
+        }
+
+        if (sparato) {
+            x = xR + (wR / 2) - (Width / 2);
+            DrawRectangle(x, y, Width, Height, Black);
+
+
+            y -= 5;
+
+            if (y <= 0) {
+                sparato = false;
             }
         }
         Wait(10);  // Una pausa di 10 ms
