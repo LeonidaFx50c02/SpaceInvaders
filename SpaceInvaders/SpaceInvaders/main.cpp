@@ -87,14 +87,13 @@ void run() {
             lastMoveTime = now;
         }
         
-        navicelleNemiche(xR2, yR2, wR2, hR2);
 
         //PROIETTILE
-        char caratterePremuto2 = LastKey();
-        if (caratterePremuto2=='c')
+        char caratterePremuto2 = LastBufferedKey();
+        if (caratterePremuto2 == 'c')
         {
             direzioneP = true;
-            DrawRectangle(x, y, Width, Height, Black);
+            DrawRectangle((xR + (wR / 2)), y, Width, Height, Black);
             if (direzioneP)
             {
                 y--;
