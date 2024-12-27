@@ -26,7 +26,12 @@ void run() {
     xR = 60;  // posizione iniziale x
     yR = IMM2D_HEIGHT - hR - 10;  // posizione iniziale y (in basso)
     
-    int xR2 = 0, yR2 = 30, wR2, hR2;
+    //NEMICI
+    int xR2 = 0, yR2 = 30, wR2 = 30, hR2 = 20;
+    int nemicoDirezione = 4;
+
+    //MOVIMENTO NEMICI (timer)
+    auto lastMoveTime = high_resolution_clock::now();
 
     int xR3, yR3, wR3, hR3;
 
@@ -70,26 +75,18 @@ void run() {
         difese(xR3, yR3, wR3, hR3);
 
         //NAVICELLE NEMICHE
-        wR2 = 30;
-        hR2 = 20;
         auto now = high_resolution_clock::now();
-        auto elapsed = duration_cast<seconds>(now - start).count();
-        if (elapsed % 2 == 0) {
-            for (int i = 0; i < 2; i++) {
-                if (xR2 > 100) {
-                    limite = true;
-                }
-                if (limite == true) {
-                    xR2--;
-                }
-                if (xR2 < 0) {
-                    limite = false;
-                }
-                if (limite == false) {
-                    xR2++;
-                }
+        auto elapsed = duration_cast<milliseconds>(now - lastMoveTime).count();
+        
+        if (elapsed > 500) {
+            xR2 += nemicoDirezione;
+            if (xR2 + (9 * 55 + wR2) > IMM2D_WIDTH || xR2 < 0) {
+                nemicoDirezione *= -1; // Cambia direzione
+                yR2 += 30; // Scendi di una riga
             }
+            lastMoveTime = now;
         }
+        
         navicelleNemiche(xR2, yR2, wR2, hR2);
 
         //PROIETTILE
