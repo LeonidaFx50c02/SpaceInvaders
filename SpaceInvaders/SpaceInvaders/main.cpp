@@ -17,7 +17,7 @@ void difese(int xR3, int  yR3, int wR3, int hR3);
 
 void run() {
     auto start = high_resolution_clock::now();
-    
+
     bool limite = false;
 
     int xR, yR, wR, hR;
@@ -25,7 +25,7 @@ void run() {
     hR = 40;  // altezza navicella
     xR = 60;  // posizione iniziale x
     yR = IMM2D_HEIGHT - hR - 10;  // posizione iniziale y (in basso)
-    
+
     //NEMICI
     int xR2 = 0, yR2 = 30, wR2 = 30, hR2 = 20;
     int nemicoDirezione = 4;
@@ -41,6 +41,7 @@ void run() {
     int Height = 40;
     int x = 320;
     int y = IMM2D_HEIGHT - Height;
+    bool sparato = false;
     while (true) {
         Clear(Yellow); // Pulisce lo schermo ad ogni ciclo
         DrawRectangle(0, 60, 640, 300, Green, Transparent); // parte nemici
@@ -77,7 +78,7 @@ void run() {
         //NAVICELLE NEMICHE
         auto now = high_resolution_clock::now();
         auto elapsed = duration_cast<milliseconds>(now - lastMoveTime).count();
-        
+
         if (elapsed > 500) {
             xR2 += nemicoDirezione;
             if (xR2 + (9 * 55 + wR2) > IMM2D_WIDTH || xR2 < 0) {
@@ -86,20 +87,25 @@ void run() {
             }
             lastMoveTime = now;
         }
-        
+
+        navicelleNemiche(xR2, yR2, wR2, hR2);
 
         //PROIETTILE
         char caratterePremuto2 = LastBufferedKey();
-        if (caratterePremuto2 == 'c')
-        {
-            direzioneP = true;
-            DrawRectangle((xR + (wR / 2)), y, Width, Height, Black);
-            if (direzioneP)
-            {
-                y--;
-            }
-            else if (y == 0) {
-                direzioneP = false;
+        if (caratterePremuto2 == 'c' && !sparato) {  
+            sparato = true;
+            y = IMM2D_HEIGHT - Height;  
+        }
+
+        if (sparato) {
+           
+            DrawRectangle(xR + (wR / 2) - (Width / 2), y, Width, Height, Black);
+
+            
+            y -= 5; 
+
+            if (y <= 0) {  
+                sparato = false;
             }
         }
         Wait(10);  // Una pausa di 10 ms
