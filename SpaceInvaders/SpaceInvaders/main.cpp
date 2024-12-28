@@ -73,20 +73,20 @@ void run() {
         yR3 = 375;
         wR3 = 100;
         hR3 = 30;
-        difese(xR3, yR3, wR3, hR3);
+        /*difese(xR3, yR3, wR3, hR3);*/
 
         //NAVICELLE NEMICHE
         auto now = high_resolution_clock::now();
         auto elapsed = duration_cast<milliseconds>(now - lastMoveTime).count();
 
-        if (elapsed > 500) {
-            xR2 += nemicoDirezione;
-            if (xR2 + (9 * 55 + wR2) > IMM2D_WIDTH || xR2 < 0) {
-                nemicoDirezione *= -1; // Cambia direzione
-                yR2 += 30; // Scendi di una riga
-            }
-            lastMoveTime = now;
-        }
+        //if (elapsed > 500) {
+        //    xR2 += nemicoDirezione;
+        //    if (xR2 + (9 * 55 + wR2) > IMM2D_WIDTH || xR2 < 0) {
+        //        nemicoDirezione *= -1; // Cambia direzione
+        //        yR2 += 30; // Scendi di una riga
+        //    }
+        //    lastMoveTime = now;
+        //}
 
         navicelleNemiche(xR2, yR2, wR2, hR2);
 
@@ -105,6 +105,9 @@ void run() {
             y -= 5;
 
             if (y <= 0) {
+                sparato = false;
+            }
+            if (y == yR2 && x>= xR2 && x<= xR2+30) {
                 sparato = false;
             }
         }
