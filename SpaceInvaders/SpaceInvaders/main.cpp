@@ -119,8 +119,8 @@ void run() {
         navicelleNemiche(xR2, yR2, wR2, hR2, nemici);
 
         //PROIETTILE
-        char caratterePremuto2 = LastBufferedKey();
-        if (caratterePremuto2 == 'c' && !sparato) {
+         
+        if (key == 'c' && !sparato) {
             sparato = true;
             y = IMM2D_HEIGHT - Height;
         }
