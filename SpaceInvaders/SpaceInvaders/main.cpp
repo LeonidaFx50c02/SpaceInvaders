@@ -11,16 +11,14 @@
 using namespace std;
 using namespace std::chrono;
 
-//assets
-
-
 Image navicella = LoadImage("navicella.png");
 
-void navicelleNemiche(int xR2, int  yR2, int wR2, int hR2);
-void difese(int xR3, int  yR3, int wR3, int hR3);
+//Image navicella(const char navicella);
+void navicelleNemiche(int xR2, int  yR2, int wR2, int hR2, int nemici[4][10]);
+void difese(int xR3, int  yR3, int wR3, int hR3, int difesa[]);
 void menu();
 void left();
-void tastoPremuto();
+
 void run() {
     menu();
     auto start = high_resolution_clock::now();
@@ -32,12 +30,7 @@ void run() {
     hR = 40;  // altezza navicella
     xR = 60;  // posizione iniziale x
     yR = IMM2D_HEIGHT - hR - 10;  // posizione iniziale y (in basso)
-    
-    int ImageWidth(32);
-    int ImageHeight(32);
-    //NEMICI
-    int xR2 = 0, yR2 = 30, wR2 = 30, hR2 = 20;
-    int nemicoDirezione = 6;
+
 
     //MOVIMENTO NEMICI (timer)
     auto lastMoveTime = high_resolution_clock::now();
@@ -52,6 +45,28 @@ void run() {
     int y = IMM2D_HEIGHT - Height;
     bool sparato = false;
 
+    //NEMICI
+    int xR2 = 0, yR2 = 30, wR2 = 30, hR2 = 20;
+    int nemicoDirezione = 4;
+    //navicelle nemici
+    int s = 55;
+    int nemici[4][10] = {
+        {xR2, xR2 + s * 1, xR2 + s * 2, xR2 + s * 3, xR2 + s * 4, xR2 + s * 5, xR2 + s * 6,xR2 + s * 7,xR2 + s * 8,xR2 + s * 9},
+        {xR2, xR2 + s * 1, xR2 + s * 2, xR2 + s * 3, xR2 + s * 4, xR2 + s * 5, xR2 + s * 6,xR2 + s * 7,xR2 + s * 8,xR2 + s * 9},
+        {xR2, xR2 + s * 1, xR2 + s * 2, xR2 + s * 3, xR2 + s * 4, xR2 + s * 5, xR2 + s * 6,xR2 + s * 7,xR2 + s * 8,xR2 + s * 9},
+        {xR2, xR2 + s * 1, xR2 + s * 2, xR2 + s * 3, xR2 + s * 4, xR2 + s * 5, xR2 + s * 6,xR2 + s * 7,xR2 + s * 8,xR2 + s * 9},
+
+    };
+    //MURA DI DIFESE
+    xR3 = 50;
+    yR3 = 375;
+    wR3 = 100;
+    hR3 = 30;
+    //difesa
+    int d = 150;
+    int difesa[4] = { xR3, xR3 + d * 1, xR3 + d * 2 , xR3 + d * 3 };
+
+
     while (true) {
         char key = LastBufferedKey();
         if (key == Esc) {
@@ -63,9 +78,8 @@ void run() {
         DrawRectangle(0, 420, 640, 60, Red); // parte navicella
 
         // Disegna la navetta
-        //DrawImage(100, 100, navicella);
         DrawRectangle(xR, yR, wR, hR, Black, Transparent);
-        
+        //Image navicella(const char navicella);
 
         // Controllo del tasto premuto per il movimento della navetta
         char caratterePremuto = LastKey();
@@ -83,12 +97,8 @@ void run() {
             }
         }
 
-        //MURA DI DIFESE
-        xR3 = 50;
-        yR3 = 375;
-        wR3 = 100;
-        hR3 = 30;
-        difese(xR3, yR3, wR3, hR3);
+        //mura di difesa
+        difese(xR3, yR3, wR3, hR3, difesa);
 
         //NAVICELLE NEMICHE
         auto now = high_resolution_clock::now();
@@ -103,18 +113,21 @@ void run() {
             lastMoveTime = now;
         }
 
-        navicelleNemiche(xR2, yR2, wR2, hR2);
+
+        //navicelle nemiche
+
+        navicelleNemiche(xR2, yR2, wR2, hR2, nemici);
 
         //PROIETTILE
-        
-        if (key == 'c' && !sparato) {
+        char caratterePremuto2 = LastBufferedKey();
+        if (caratterePremuto2 == 'c' && !sparato) {
             sparato = true;
             y = IMM2D_HEIGHT - Height;
         }
 
         if (sparato) {
-
-            DrawRectangle(xR + (wR / 2) - (Width / 2), y, Width, Height, Black);
+            x = xR + (wR / 2) - (Width / 2);
+            DrawRectangle(x, y, Width, Height, Black);
 
 
             y -= 5;
@@ -122,26 +135,55 @@ void run() {
             if (y <= 0) {
                 sparato = false;
             }
+
+            //vedo se colpisce nemici
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 10; j++) {
+                    if (x >= nemici[i][j] && x <= nemici[i][j] + wR2 && y <= yR2 + hR2) {
+
+                        sparato = false;
+                        nemici[i][j] = -1000;  //tolgo nemico
+                    }
+                }
+            }
+
+            //vedo se colpisce difesa
+            for (int i = 0; i < 4; i++) {
+                if (x >= difesa[i] && x <= difesa[i] + wR3 && y <= yR3 + hR3) {
+
+                    sparato = false;
+                    difesa[i] = -10000;  //tolgo difesa
+                }
+            }
+
         }
         Wait(10);  // Una pausa di 10 ms
     }
 }
 
-void navicelleNemiche(int xR2, int  yR2, int wR2, int hR2) {
+
+void navicelleNemiche(int xR2, int yR2, int wR2, int hR2, int nemici[4][10])
+{
     for (int i = 0; i < 4; i++) {
         yR2 += 30;
-        for (int i = 0; i < 10; i++) {
-            DrawRectangle(xR2, yR2, wR2, hR2, Red);
-            xR2 += 55;
+        for (int j = 0; j < 10; j++) {
+            if (nemici[i][j] != -1000) {
+
+                DrawRectangle(nemici[i][j], yR2, wR2, hR2, Red);
+                nemici[i][j] += 55;
+
+            }
         }
         xR2 -= 550;
     }
 }
 
-void difese(int xR3, int  yR3, int wR3, int hR3) {
+void difese(int xR3, int  yR3, int wR3, int hR3, int difesa[]) {
     for (int i = 0; i < 4; i++) {
-        DrawRectangle(xR3, yR3, wR3, hR3, Black);
-        xR3 += 150;
+        if (difesa[i] != -10000) {
+
+            DrawRectangle(difesa[i], yR3, wR3, hR3, Black);
+        }
     }
 }
 
@@ -159,7 +201,7 @@ void menu() {
 
 void left() {
     Image leftImg = LoadImage("Assets/left.png");
-    DrawImage(IMM2D_WIDTH/12, IMM2D_HEIGHT/12, leftImg);
+    DrawImage(IMM2D_WIDTH / 12, IMM2D_HEIGHT / 12, leftImg);
     while (true) {
         char key = LastKey();
         if (key == 'y') {
