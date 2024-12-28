@@ -25,8 +25,22 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="navicella.png">
-      <Filter>File di origine</Filter>
+    <Image Include="Assets\HomeSpace.png">
+      <Filter>File di risorse</Filter>
     </Image>
+    <Image Include="Assets\navicella.png">
+      <Filter>File di risorse</Filter>
+    </Image>
+    <Image Include="Assets\gameover.png">
+      <Filter>File di risorse</Filter>
+    </Image>
+    <Image Include="Assets\left.png">
+      <Filter>File di risorse</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Music\01 - Opening Theme - Noriyuki Iwadare.flac">
+      <Filter>File di risorse</Filter>
+    </None>
   </ItemGroup>
 </Project>

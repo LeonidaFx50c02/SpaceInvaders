@@ -133,7 +133,13 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="navicella.png" />
+    <Image Include="Assets\gameover.png" />
+    <Image Include="Assets\HomeSpace.png" />
+    <Image Include="Assets\left.png" />
+    <Image Include="Assets\navicella.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Music\01 - Opening Theme - Noriyuki Iwadare.flac" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

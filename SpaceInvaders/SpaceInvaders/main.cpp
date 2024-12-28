@@ -11,11 +11,18 @@
 using namespace std;
 using namespace std::chrono;
 
-//Image navicella(const char navicella);
+//assets
+
+
+Image navicella = LoadImage("navicella.png");
+
 void navicelleNemiche(int xR2, int  yR2, int wR2, int hR2);
 void difese(int xR3, int  yR3, int wR3, int hR3);
-
+void menu();
+void left();
+void tastoPremuto();
 void run() {
+    menu();
     auto start = high_resolution_clock::now();
 
     bool limite = false;
@@ -25,10 +32,12 @@ void run() {
     hR = 40;  // altezza navicella
     xR = 60;  // posizione iniziale x
     yR = IMM2D_HEIGHT - hR - 10;  // posizione iniziale y (in basso)
-
+    
+    int ImageWidth(32);
+    int ImageHeight(32);
     //NEMICI
     int xR2 = 0, yR2 = 30, wR2 = 30, hR2 = 20;
-    int nemicoDirezione = 4;
+    int nemicoDirezione = 6;
 
     //MOVIMENTO NEMICI (timer)
     auto lastMoveTime = high_resolution_clock::now();
@@ -42,15 +51,21 @@ void run() {
     int x = 320;
     int y = IMM2D_HEIGHT - Height;
     bool sparato = false;
+
     while (true) {
+        char key = LastBufferedKey();
+        if (key == Esc) {
+            left();
+        }
         Clear(Yellow); // Pulisce lo schermo ad ogni ciclo
         DrawRectangle(0, 60, 640, 300, Green, Transparent); // parte nemici
         DrawRectangle(0, 360, 640, 60, Blue, Transparent); // parte difesa
         DrawRectangle(0, 420, 640, 60, Red); // parte navicella
 
         // Disegna la navetta
+        //DrawImage(100, 100, navicella);
         DrawRectangle(xR, yR, wR, hR, Black, Transparent);
-        //Image navicella(const char navicella);
+        
 
         // Controllo del tasto premuto per il movimento della navetta
         char caratterePremuto = LastKey();
@@ -91,20 +106,20 @@ void run() {
         navicelleNemiche(xR2, yR2, wR2, hR2);
 
         //PROIETTILE
-        char caratterePremuto2 = LastBufferedKey();
-        if (caratterePremuto2 == 'c' && !sparato) {  
+        
+        if (key == 'c' && !sparato) {
             sparato = true;
-            y = IMM2D_HEIGHT - Height;  
+            y = IMM2D_HEIGHT - Height;
         }
 
         if (sparato) {
-           
+
             DrawRectangle(xR + (wR / 2) - (Width / 2), y, Width, Height, Black);
 
-            
-            y -= 5; 
 
-            if (y <= 0) {  
+            y -= 5;
+
+            if (y <= 0) {
                 sparato = false;
             }
         }
@@ -127,5 +142,31 @@ void difese(int xR3, int  yR3, int wR3, int hR3) {
     for (int i = 0; i < 4; i++) {
         DrawRectangle(xR3, yR3, wR3, hR3, Black);
         xR3 += 150;
+    }
+}
+
+void menu() {
+    Image Home = LoadImage("Assets/HomeSpace.png");
+    DrawImage(IMM2D_WIDTH / 52, IMM2D_HEIGHT / 52, Home);
+    while (true) {
+        char key = LastKey();
+        if (key == Enter) {
+            break;
+        }
+    }
+
+}
+
+void left() {
+    Image leftImg = LoadImage("Assets/left.png");
+    DrawImage(IMM2D_WIDTH/12, IMM2D_HEIGHT/12, leftImg);
+    while (true) {
+        char key = LastKey();
+        if (key == 'y') {
+            CloseWindow();
+        }
+        else if (key == 'n') {
+            break;
+        }
     }
 }
