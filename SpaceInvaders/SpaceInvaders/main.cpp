@@ -62,6 +62,7 @@ void run() {
     yR3 = 375;
     wR3 = 100;
     hR3 = 30;
+
     //difesa
     int d = 150;
     int difesa[4] = { xR3, xR3 + d * 1, xR3 + d * 2 , xR3 + d * 3 };
@@ -105,9 +106,9 @@ void run() {
         auto elapsed = duration_cast<milliseconds>(now - lastMoveTime).count();
 
         if (elapsed > 500) {
-            xR2 += nemicoDirezione;
+            xR2 += s;
             if (xR2 + (9 * 55 + wR2) > IMM2D_WIDTH || xR2 < 0) {
-                nemicoDirezione *= -1; // Cambia direzione
+                s *= -1; // Cambia direzione
                 yR2 += 30; // Scendi di una riga
             }
             lastMoveTime = now;
