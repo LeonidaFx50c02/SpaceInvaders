@@ -41,8 +41,8 @@ void run() {
     bool direzioneP = false;
     int Width = 10;
     int Height = 40;
-    int x = 320;
-    int y = IMM2D_HEIGHT - Height;
+    int xRp = xR;
+    int yRp = IMM2D_HEIGHT - Height;
     bool sparato = false;
 
     //NEMICI
@@ -122,25 +122,22 @@ void run() {
          
         if (key == 'c' && !sparato) {
             sparato = true;
-            y = IMM2D_HEIGHT - Height;
+            yRp = IMM2D_HEIGHT - Height;
+            xRp = xR + (wR / 2);
         }
 
         if (sparato) {
-            x = xR + (wR / 2) - (Width / 2);
-            DrawRectangle(x, y, Width, Height, Black);
+            DrawRectangle(xRp, yRp, Width, Height, Black);
+            yRp -= 2;
 
-
-            y -= 5;
-
-            if (y <= 0) {
+            if (yRp <= 0) {
                 sparato = false;
             }
 
             //vedo se colpisce nemici
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 10; j++) {
-                    if (x >= nemici[i][j] && x <= nemici[i][j] + wR2 && y <= yR2 + hR2) {
-
+                    if (xRp >= nemici[i][j] && xRp <= nemici[i][j] + wR2 && yRp >= nemici[i][j] && yRp <= nemici[i][j] + hR2) {
                         sparato = false;
                         nemici[i][j] = -1000;  //tolgo nemico
                     }
@@ -149,32 +146,27 @@ void run() {
 
             //vedo se colpisce difesa
             for (int i = 0; i < 4; i++) {
-                if (x >= difesa[i] && x <= difesa[i] + wR3 && y <= yR3 + hR3) {
-
+                if (xRp >= difesa[i] && xRp <= difesa[i] + wR3 && yRp <= yR3 + hR3) {
                     sparato = false;
                     difesa[i] = -10000;  //tolgo difesa
                 }
             }
-
         }
         Wait(10);  // Una pausa di 10 ms
     }
 }
 
 
-void navicelleNemiche(int xR2, int yR2, int wR2, int hR2, int nemici[4][10])
-{
+void navicelleNemiche(int xR2, int yR2, int wR2, int hR2, int nemici[4][10]) {
     for (int i = 0; i < 4; i++) {
         yR2 += 30;
         for (int j = 0; j < 10; j++) {
             if (nemici[i][j] != -1000) {
-
                 DrawRectangle(nemici[i][j], yR2, wR2, hR2, Red);
                 nemici[i][j] += 55;
-
             }
         }
-        xR2 -= 550;
+       xR2 -= 550;
     }
 }
 
