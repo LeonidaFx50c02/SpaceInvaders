@@ -8,6 +8,8 @@
 #include <string>
 #include <chrono>
 #include <thread>
+#include <cstdlib>
+#include <ctime> 
 
 using namespace std;
 using namespace std::chrono;
@@ -21,8 +23,11 @@ void menu();
 void left();
 
 void run() {
+    srand(time(NULL));
     menu();
     auto start = high_resolution_clock::now();
+    //proiettili nemici
+    auto start2 = high_resolution_clock::now();
 
     bool limite = false;
 
@@ -32,6 +37,12 @@ void run() {
     xR = 60;  // posizione iniziale x
     yR = IMM2D_HEIGHT - hR - 10;  // posizione iniziale y (in basso)
 
+    //proiettili nemici
+    bool direzionePN = false;
+    int xRPN = 0;
+    int yRPN = 200;
+    bool sparatoN = false;
+    auto lastMoveTime2 = high_resolution_clock::now();
 
     //MOVIMENTO NEMICI (timer)
     auto lastMoveTime = high_resolution_clock::now();
@@ -176,6 +187,45 @@ void run() {
                 }
             }
         }
+
+        //proiettili nemici
+        auto now2 = high_resolution_clock::now();
+        auto elapsed2 = duration_cast<milliseconds>(now2 - lastMoveTime2).count();
+
+        if (elapsed2>5000)
+        {
+            sparatoN = true;
+            lastMoveTime2 = now;
+            xRPN = rand() % 641 + 0;
+        }
+        if (sparatoN)
+        {
+            
+
+            DrawRectangle(xRPN, yRPN, Width, Height, Black);
+            yRPN += 2;
+
+
+            if (yRPN >= IMM2D_HEIGHT) {
+                sparatoN = false;
+            }
+
+            //vedo se colpisce difesa
+            for (int i = 0; i < 4; i++) {
+                if (xRPN >= difesa[i] && xRPN <= difesa[i] + wR3 && yRPN >= yR3 + hR3) {
+                    sparatoN = false;
+                    difesa[i] = -10000;  //tolgo difesa
+                }
+            }
+
+            //vedo se colpisce la mia navicella
+            if (xRPN >= xR && xRPN <= xR + wR && yRPN >= yR + hR) {
+                sparatoN = false;
+                xR = -10000;  //tolgo mia navicella
+            }
+
+        }
+       
         Wait(10);  // Una pausa di 10 ms
     }
 }
