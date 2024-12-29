@@ -112,9 +112,10 @@ void run() {
                 for (int j = 0; j < 10; j++) {
                     if (nemici[i][j] != -1000) {
                         nemici[i][j] += nemicoDirezione;
-                        if (nemici[0][10] + (9 * 55 + wR2) > IMM2D_WIDTH || nemici[i][j] < 0) {
+                        if (nemici[i][j] +  wR2 > IMM2D_WIDTH || nemici[i][j] < 0) {
                             nemicoDirezione *= -1; // Cambia direzione
                             yR2 += 30; // Scendi di una riga
+                            break;
                         }
                     }
                 }
@@ -145,15 +146,28 @@ void run() {
             }
 
             //vedo se colpisce nemici
+            //for (int i = 0; i < 4; i++) {
+            //    for (int j = 0; j < 10; j++) {
+            //        if (xRp >= nemici[i][j] && xRp <= nemici[i][j] + wR2 && yRp >= nemici[i][j] && yRp <= nemici[i][j] + hR2) {
+            //            sparato = false;
+            //            nemici[i][j] = -1000;  //tolgo nemico
+            //        }
+            //    }
+            //}
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 10; j++) {
-                    if (xRp >= nemici[i][j] && xRp <= nemici[i][j] + wR2 && yRp >= nemici[i][j] && yRp <= nemici[i][j] + hR2) {
-                        sparato = false;
-                        nemici[i][j] = -1000;  //tolgo nemico
+                    if (nemici[i][j] != -1000) {  
+                        
+                        int parteX = nemici[i][j];
+                        int parteY = yR2 + i * 30;  
+                        if (xRp >= parteX && xRp <= parteX + wR2 && yRp >= parteY && yRp <= parteY + hR2) {
+                            sparato = false;  
+                            nemici[i][j] = -1000;  
+                            break;  
+                        }
                     }
                 }
             }
-
             //vedo se colpisce difesa
             for (int i = 0; i < 4; i++) {
                 if (xRp >= difesa[i] && xRp <= difesa[i] + wR3 && yRp <= yR3 + hR3) {
