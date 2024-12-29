@@ -70,6 +70,7 @@ void run() {
         {xR2, xR2 + s * 1, xR2 + s * 2, xR2 + s * 3, xR2 + s * 4, xR2 + s * 5, xR2 + s * 6,xR2 + s * 7,xR2 + s * 8,xR2 + s * 9},
 
     };
+
     //MURA DI DIFESE
     xR3 = 50;
     yR3 = 375;
@@ -79,20 +80,20 @@ void run() {
     //difesa
     int d = 150;
     int difesa[4] = { xR3, xR3 + d * 1, xR3 + d * 2 , xR3 + d * 3 };
-
+    int contDifesa[4] = { 4,4,4,4 };
 
     while (true) {
         char key = LastBufferedKey();
         if (key == Esc) {
             left();
         }
-        Clear(Yellow); // Pulisce lo schermo ad ogni ciclo
-        DrawRectangle(0, 60, 640, 300, Green, Transparent); // parte nemici
-        DrawRectangle(0, 360, 640, 60, Blue, Transparent); // parte difesa
-        DrawRectangle(0, 420, 640, 60, Red); // parte navicella
+        Clear(Black); // Pulisce lo schermo ad ogni ciclo
+        //DrawRectangle(0, 60, 640, 300, Green, Transparent); // parte nemici
+        //DrawRectangle(0, 360, 640, 60, Blue, Transparent); // parte difesa
+        //DrawRectangle(0, 420, 640, 60, Red); // parte navicella
 
         // Disegna la navetta
-        DrawRectangle(xR, yR, wR, hR, Black, Transparent);
+        DrawRectangle(xR, yR, wR, hR, Red, Transparent);
         //Image navicella(const char navicella);
 
         // Controllo del tasto premuto per il movimento della navetta
@@ -149,7 +150,7 @@ void run() {
         }
 
         if (sparato) {
-            DrawRectangle(xRp, yRp, Width, Height, Black);
+            DrawRectangle(xRp, yRp, Width, Height, Blue);
             yRp -= 2;
 
             if (yRp <= 0) {
@@ -183,7 +184,11 @@ void run() {
             for (int i = 0; i < 4; i++) {
                 if (xRp >= difesa[i] && xRp <= difesa[i] + wR3 && yRp <= yR3 + hR3) {
                     sparato = false;
-                    difesa[i] = -10000;  //tolgo difesa
+                    contDifesa[i]--;
+                    if (contDifesa[i] == 0)
+                    {
+                        difesa[i] = -10000;  //tolgo difesa;
+                    }
                 }
             }
         }
@@ -202,7 +207,7 @@ void run() {
         {
             
 
-            DrawRectangle(xRPN, yRPN, Width, Height, Black);
+            DrawRectangle(xRPN, yRPN, Width, Height, Blue);
             yRPN += 2;
 
 
@@ -214,7 +219,12 @@ void run() {
             for (int i = 0; i < 4; i++) {
                 if (xRPN >= difesa[i] && xRPN <= difesa[i] + wR3 && yRPN >= yR3 + hR3) {
                     sparatoN = false;
-                    difesa[i] = -10000;  //tolgo difesa
+                    contDifesa[i]--;
+                    if (contDifesa[i] == 0)
+                    {
+                        difesa[i] = -10000;  //tolgo difesa;
+                    }
+                    
                 }
             }
 
@@ -252,7 +262,7 @@ void difese(int xR3, int  yR3, int wR3, int hR3, int difesa[]) {
     for (int i = 0; i < 4; i++) {
         if (difesa[i] != -10000) {
 
-            DrawRectangle(difesa[i], yR3, wR3, hR3, Black);
+            DrawRectangle(difesa[i], yR3, wR3, hR3, Red);
         }
     }
 }
