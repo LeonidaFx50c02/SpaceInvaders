@@ -25,6 +25,7 @@ void left();
 void run() {
     srand(time(NULL));
     menu();
+
     auto start = high_resolution_clock::now();
     //proiettili nemici
     auto start2 = high_resolution_clock::now();
@@ -52,14 +53,14 @@ void run() {
     //proiettile
     bool direzioneP = false;
     int Width = 10;
-    int Height = 40;
+    int Height = 20;
     int xRp = xR;
     int yRp = IMM2D_HEIGHT - Height;
     bool sparato = false;
 
     //NEMICI
 
-    int xR2 = 0, yR2 = 60, wR2 = 30, hR2 = 20;
+    int xR2 = 0, yR2 = 60, wR2 = 50, hR2 = 35;
     int nemicoDirezione = 4;
     //navicelle nemici
     int s = 55;
@@ -87,7 +88,7 @@ void run() {
         if (key == Esc) {
             left();
         }
-        Clear(Black); // Pulisce lo schermo ad ogni ciclo
+        Clear(Black);// Pulisce lo schermo ad ogni ciclo
         //DrawRectangle(0, 60, 640, 300, Green, Transparent); // parte nemici
         //DrawRectangle(0, 360, 640, 60, Blue, Transparent); // parte difesa
         //DrawRectangle(0, 420, 640, 60, Red); // parte navicella
@@ -127,7 +128,6 @@ void run() {
                         if (nemici[i][j] + wR2 > IMM2D_WIDTH || nemici[i][j] < 0) {
                             nemicoDirezione *= -1; // Cambia direzione
                             yR2 += 30; // Scendi di una riga
-                            break;
                         }
                     }
                 }
@@ -151,7 +151,7 @@ void run() {
 
         if (sparato) {
             DrawRectangle(xRp, yRp, Width, Height, Blue);
-            yRp -= 2;
+            yRp -= 4;
 
             if (yRp <= 0) {
                 sparato = false;
@@ -169,7 +169,6 @@ void run() {
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 10; j++) {
                     if (nemici[i][j] != -1000) {
-
                         int parteX = nemici[i][j];
                         int parteY = yR2 + i * 30;
                         if (xRp >= parteX && xRp <= parteX + wR2 && yRp >= parteY && yRp <= parteY + hR2) {
@@ -200,12 +199,17 @@ void run() {
         if (elapsed2 > 2500) {
             sparatoN = true;
             lastMoveTime2 = now;
-            xRPN = rand() % IMM2D_WIDTH - Width;
-            yRPN = yR2;
+            int riga = rand() % 4;
+            int colonna = rand() % 10;
+            bool isTrovato = false;
+            if (nemici[riga][colonna] != -1000) { 
+                xRPN = nemici[riga][colonna] + (wR2 / 2); 
+                yRPN = yR2 + riga * 30 + hR2; 
+            }
         }
         if (sparatoN) {
             DrawRectangle(xRPN, yRPN, Width, Height, Blue);
-            yRPN += 2;
+            yRPN += 4;
             if (yRPN >= IMM2D_HEIGHT) {
                 sparatoN = false;
             }
@@ -228,7 +232,7 @@ void run() {
                 xR = -10000;  //tolgo mia navicella
             }
         }
-        Wait(10);  // Una pausa di 10 ms
+        Wait(32);  // Una pausa di 10 ms
     }
 }
 
@@ -237,14 +241,11 @@ void run() {
 void navicelleNemiche(int xR2, int yR2, int wR2, int hR2, int nemici[4][10]) {
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 10; j++) {
-            // Se il nemico � attivo (non -1000)
             if (nemici[i][j] != -1000) {
-                // Disegna il nemico in base alla posizione
                 DrawRectangle(nemici[i][j], yR2, wR2, hR2, Red);
             }
         }
-        // Sposta la yR2 di 30 per disegnare la riga successiva di nemici
-        yR2 += 30;
+        yR2 += 50;
     }
 
 
