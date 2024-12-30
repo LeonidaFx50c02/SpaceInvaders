@@ -1,3 +1,4 @@
+﻿//prova MIA
 #define IMM2D_WIDTH 640
 #define IMM2D_HEIGHT 480
 #define IMM2D_SCALE 1
@@ -7,6 +8,8 @@
 #include <string>
 #include <chrono>
 #include <thread>
+#include <cstdlib>
+#include <ctime> 
 
 using namespace std;
 using namespace std::chrono;
@@ -15,13 +18,16 @@ Image navicella = LoadImage("navicella.png");
 
 //Image navicella(const char navicella);
 void navicelleNemiche(int xR2, int  yR2, int wR2, int hR2, int nemici[4][10]);
-void difese(int xR3, int  yR3, int wR3, int hR3, int difesa[]);
+void difese(int xR3, int  yR3, int wR3, int hR3[], int difesa[]);
 void menu();
 void left();
 
 void run() {
+    srand(time(NULL));
     menu();
     auto start = high_resolution_clock::now();
+    //proiettili nemici
+    auto start2 = high_resolution_clock::now();
 
     bool limite = false;
 
@@ -31,11 +37,17 @@ void run() {
     xR = 60;  // posizione iniziale x
     yR = IMM2D_HEIGHT - hR - 10;  // posizione iniziale y (in basso)
 
+    //proiettili nemici
+    bool direzionePN = false;
+    int xRPN = 0;
+    int yRPN = 200;
+    bool sparatoN = false;
+    auto lastMoveTime2 = high_resolution_clock::now();
 
     //MOVIMENTO NEMICI (timer)
     auto lastMoveTime = high_resolution_clock::now();
 
-    int xR3, yR3, wR3, hR3;
+    int xR3, yR3, wR3;
 
     //proiettile
     bool direzioneP = false;
@@ -46,7 +58,8 @@ void run() {
     bool sparato = false;
 
     //NEMICI
-    int xR2 = 0, yR2 = 30, wR2 = 30, hR2 = 20;
+
+    int xR2 = 0, yR2 = 60, wR2 = 30, hR2 = 20;
     int nemicoDirezione = 4;
     //navicelle nemici
     int s = 55;
@@ -57,30 +70,31 @@ void run() {
         {xR2, xR2 + s * 1, xR2 + s * 2, xR2 + s * 3, xR2 + s * 4, xR2 + s * 5, xR2 + s * 6,xR2 + s * 7,xR2 + s * 8,xR2 + s * 9},
 
     };
+
     //MURA DI DIFESE
     xR3 = 50;
-    yR3 = 375;
+    yR3 = 365;
     wR3 = 100;
-    hR3 = 30;
+    int  hR3[4] = { 40, 40, 40, 40 };
 
     //difesa
     int d = 150;
     int difesa[4] = { xR3, xR3 + d * 1, xR3 + d * 2 , xR3 + d * 3 };
-
+    int contDifesa[4] = { 4,4,4,4 };
 
     while (true) {
         char key = LastBufferedKey();
         if (key == Esc) {
             left();
         }
-        Clear(Yellow); // Pulisce lo schermo ad ogni ciclo
-        DrawRectangle(0, 60, 640, 300, Green, Transparent); // parte nemici
-        DrawRectangle(0, 360, 640, 60, Blue, Transparent); // parte difesa
-        DrawRectangle(0, 420, 640, 60, Red); // parte navicella
+        Clear(Black); // Pulisce lo schermo ad ogni ciclo
+        //DrawRectangle(0, 60, 640, 300, Green, Transparent); // parte nemici
+        //DrawRectangle(0, 360, 640, 60, Blue, Transparent); // parte difesa
+        //DrawRectangle(0, 420, 640, 60, Red); // parte navicella
 
         // Disegna la navetta
-        DrawRectangle(xR, yR, wR, hR, Black, Transparent);
-        //Image navicella(const char navicella);
+        DrawRectangle(xR, yR, wR, hR, Red, Transparent);
+        
 
         // Controllo del tasto premuto per il movimento della navetta
         char caratterePremuto = LastKey();
@@ -106,13 +120,21 @@ void run() {
         auto elapsed = duration_cast<milliseconds>(now - lastMoveTime).count();
 
         if (elapsed > 500) {
-            xR2 += s;
-            if (xR2 + (9 * 55 + wR2) > IMM2D_WIDTH || xR2 < 0) {
-                s *= -1; // Cambia direzione
-                yR2 += 30; // Scendi di una riga
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 10; j++) {
+                    if (nemici[i][j] != -1000) {
+                        nemici[i][j] += nemicoDirezione;
+                        if (nemici[i][j] + wR2 > IMM2D_WIDTH || nemici[i][j] < 0) {
+                            nemicoDirezione *= -1; // Cambia direzione
+                            yR2 += 30; // Scendi di una riga
+                            break;
+                        }
+                    }
+                }
             }
             lastMoveTime = now;
         }
+
 
 
         //navicelle nemiche
@@ -120,7 +142,7 @@ void run() {
         navicelleNemiche(xR2, yR2, wR2, hR2, nemici);
 
         //PROIETTILE
-         
+
         if (key == 'c' && !sparato) {
             sparato = true;
             yRp = IMM2D_HEIGHT - Height;
@@ -128,7 +150,7 @@ void run() {
         }
 
         if (sparato) {
-            DrawRectangle(xRp, yRp, Width, Height, Black);
+            DrawRectangle(xRp, yRp, Width, Height, Blue);
             yRp -= 2;
 
             if (yRp <= 0) {
@@ -136,21 +158,74 @@ void run() {
             }
 
             //vedo se colpisce nemici
+            //for (int i = 0; i < 4; i++) {
+            //    for (int j = 0; j < 10; j++) {
+            //        if (xRp >= nemici[i][j] && xRp <= nemici[i][j] + wR2 && yRp >= nemici[i][j] && yRp <= nemici[i][j] + hR2) {
+            //            sparato = false;
+            //            nemici[i][j] = -1000;  //tolgo nemico
+            //        }
+            //    }
+            //}
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 10; j++) {
-                    if (xRp >= nemici[i][j] && xRp <= nemici[i][j] + wR2 && yRp >= nemici[i][j] && yRp <= nemici[i][j] + hR2) {
-                        sparato = false;
-                        nemici[i][j] = -1000;  //tolgo nemico
+                    if (nemici[i][j] != -1000) {
+
+                        int parteX = nemici[i][j];
+                        int parteY = yR2 + i * 30;
+                        if (xRp >= parteX && xRp <= parteX + wR2 && yRp >= parteY && yRp <= parteY + hR2) {
+                            sparato = false;
+                            nemici[i][j] = -1000;
+                            break;
+                        }
                     }
                 }
+            }
+            //vedo se colpisce difesa
+            for (int i = 0; i < 4; i++) {
+                if (xRp + Width > difesa[i] && xRp < difesa[i] + wR3 && yRp + Height > yR3 && yRp < yR3 + hR3[i]) {
+                    sparato = false;
+                    contDifesa[i]--;
+                    hR3[i] -= 10;
+                    if (contDifesa[i] == 0) {
+                        difesa[i] = -10000;  //tolgo difesa;
+                    }
+                }
+            }
+        }
+
+        //proiettili nemici
+        auto now2 = high_resolution_clock::now();
+        auto elapsed2 = duration_cast<milliseconds>(now2 - lastMoveTime2).count();
+
+        if (elapsed2 > 2500) {
+            sparatoN = true;
+            lastMoveTime2 = now;
+            xRPN = rand() % IMM2D_WIDTH - Width;
+            yRPN = yR2;
+        }
+        if (sparatoN) {
+            DrawRectangle(xRPN, yRPN, Width, Height, Blue);
+            yRPN += 2;
+            if (yRPN >= IMM2D_HEIGHT) {
+                sparatoN = false;
             }
 
             //vedo se colpisce difesa
             for (int i = 0; i < 4; i++) {
-                if (xRp >= difesa[i] && xRp <= difesa[i] + wR3 && yRp <= yR3 + hR3) {
-                    sparato = false;
-                    difesa[i] = -10000;  //tolgo difesa
+                if (xRPN >= difesa[i] && xRPN <= difesa[i] + wR3 && yRPN >= yR3 && yRPN <= yR3 + hR3[i]) {
+                    sparatoN = false;
+                    contDifesa[i]--;
+                    hR3[i] -= 10;
+                    if (contDifesa[i] == 0) {
+                        difesa[i] = -10000;  //tolgo difesa;
+                    }
                 }
+            }
+
+            //vedo se colpisce la mia navicella
+            if (xRPN >= xR && xRPN <= xR + wR && yRPN == yR) {
+                sparatoN = false;
+                xR = -10000;  //tolgo mia navicella
             }
         }
         Wait(10);  // Una pausa di 10 ms
@@ -158,24 +233,27 @@ void run() {
 }
 
 
+
 void navicelleNemiche(int xR2, int yR2, int wR2, int hR2, int nemici[4][10]) {
     for (int i = 0; i < 4; i++) {
-        yR2 += 30;
         for (int j = 0; j < 10; j++) {
+            // Se il nemico � attivo (non -1000)
             if (nemici[i][j] != -1000) {
+                // Disegna il nemico in base alla posizione
                 DrawRectangle(nemici[i][j], yR2, wR2, hR2, Red);
-                nemici[i][j] += 55;
             }
         }
-       xR2 -= 550;
+        // Sposta la yR2 di 30 per disegnare la riga successiva di nemici
+        yR2 += 30;
     }
+
+
 }
 
-void difese(int xR3, int  yR3, int wR3, int hR3, int difesa[]) {
+void difese(int xR3, int  yR3, int wR3, int hR3[], int difesa[]) {
     for (int i = 0; i < 4; i++) {
         if (difesa[i] != -10000) {
-
-            DrawRectangle(difesa[i], yR3, wR3, hR3, Black);
+            DrawRectangle(difesa[i], yR3, wR3, hR3[i], Red);
         }
     }
 }
@@ -189,7 +267,6 @@ void menu() {
             break;
         }
     }
-
 }
 
 void left() {
