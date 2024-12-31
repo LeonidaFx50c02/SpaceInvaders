@@ -137,6 +137,10 @@
     <Image Include="Assets\HomeSpace.png" />
     <Image Include="Assets\left.png" />
     <Image Include="Assets\navicella.png" />
+    <Image Include="Assets\nemico.png" />
+    <Image Include="Assets\proiettileMio.png" />
+    <Image Include="Assets\proiettileNemico.png" />
+    <Image Include="Assets\replay.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Music\01 - Opening Theme - Noriyuki Iwadare.flac" />
