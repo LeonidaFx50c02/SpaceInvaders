@@ -1,6 +1,6 @@
 ﻿#define IMM2D_WIDTH 640
 #define IMM2D_HEIGHT 480
-#define IMM2D_SCALE 2
+#define IMM2D_SCALE 1
 
 #define IMM2D_IMPLEMENTATION
 #include "immediate2d.h"
@@ -24,8 +24,8 @@ void navicelleNemiche(int xR2, int  yR2, int wR2, int hR2, int nemici[4][10], Im
 void difese(int xR3, int  yR3, int wR3, int hR3[], int difesa[]);
 void menu();
 void left();
-void replay();
-
+bool replay();
+void reset(int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s);
 void run() {
     srand(time(NULL));
     menu();
@@ -41,11 +41,11 @@ void run() {
     bool limite = false;
     //navicella
     int xR, yR, wR, hR;
-    wR = 80;  // larghezza navicella
-    hR = 40;  // altezza navicella
+    const Image navicella = LoadImage(NavicellaPng);
+    wR = ImageWidth(navicella);  // larghezza navicella
+    hR = ImageHeight(navicella);  // altezza navicella
     xR = 60;  // posizione iniziale x
     yR = IMM2D_HEIGHT - hR - 10;  // posizione iniziale y (in basso)
-    const Image navicella = LoadImage(NavicellaPng);
 
     //proiettili nemici
     bool direzionePN = false;
@@ -143,12 +143,18 @@ void run() {
                         if (nemici[i][j] + wR2 > IMM2D_WIDTH || nemici[i][j] < 0) {
                             nemicoDirezione *= -1; // Cambia direzione
                             yR2 += 30; // Scendi di una riga
-                            if (yR2==360)
+                            if ((yR2 + ((20 * 4) + (30 * 3))) >= 360)
                             {
+                                Clear(Black);
                                 Image overImg = LoadImage("Assets/gameover.png");
                                 DrawImage(IMM2D_WIDTH / 12, IMM2D_HEIGHT / 12, overImg);
                                 Wait(5000);
-                                replay();
+                                Clear(Black);
+                                bool v = replay();
+                                if (v==true)
+                                {
+                                    reset(contDifesa,  d, xR3,yR3,  wR3,  hR3,  difesa,  xR2,  yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
+                                }
                             }
                         }
                     }
@@ -250,9 +256,18 @@ void run() {
             }
 
             //vedo se colpisce la mia navicella
-            if (xRPN >= xR && xRPN <= xR + wR && yRPN == yR) {
+            if (xRPN >= xR && xRPN <= xR + wR && yRPN >= yR && yRPN <= yR + hR) {
                 sparatoN = false;
-                xR = -10000;  //tolgo mia navicella
+                Clear(Black);
+                Image overImg = LoadImage("Assets/gameover.png");
+                DrawImage(IMM2D_WIDTH / 12, IMM2D_HEIGHT / 12, overImg);
+                Wait(5000);
+                Clear(Black);
+                bool v = replay();
+                if (v == true)
+                {
+                    reset(contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
+                }
             }
         }
         Wait(32);  // Una pausa di 10 ms
@@ -307,17 +322,59 @@ void left() {
     }
 }
 
-void replay()
+bool replay()
 {
+    bool y = false;
     Image replayImg = LoadImage("Assets/replay.png");
     DrawImage(IMM2D_WIDTH / 12, IMM2D_HEIGHT / 12, replayImg);
     while (true) {
         char key = LastKey();
         if (key == 'y') {
+            y = true;
             break;
+
         }
         else if (key == 'n') {
             CloseWindow();
         }
     }
+    return y;
+}
+
+void reset(int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s)
+{
+    //NEMICI
+    
+    
+    xR2 = 0, yR2 = 60, wR2 = ImageWidth(Nemico), hR2 = ImageHeight(Nemico);
+    nemicoDirezione = 4;
+    //navicelle nemici
+    s = 55;
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 10; j++)
+        {
+            nemici[i][j] = xR2 + (55 * j);
+        }
+    }
+    //MURA DI DIFESE
+    xR3 = 50;
+    yR3 = 365;
+    wR3 = 100;
+    for (int i = 0; i < 4; i++)
+    {
+        hR3[i] = 40;
+    }
+
+    //difesa
+    d = 150;   
+    difesa[0] = xR3;
+    difesa[1] = xR3 + d * 1;
+    difesa[2] = xR3 + d * 2;
+    difesa[3] = xR3 + d * 3;
+    for (int i = 0; i < 4; i++)
+    {
+        contDifesa[i] = 40;
+    }
+
 }
