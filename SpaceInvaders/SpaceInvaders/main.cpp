@@ -149,23 +149,20 @@ void run() {
             xRp = xR + (wR / 2);
         }
 
-        if (sparato) {
-            DrawRectangle(xRp, yRp, Width, Height, Blue);
-            yRp -= 4;
-
+        if (sparato) {            
             if (yRp <= 0) {
                 sparato = false;
             }
 
             //vedo se colpisce nemici
-            //for (int i = 0; i < 4; i++) {
-            //    for (int j = 0; j < 10; j++) {
-            //        if (xRp >= nemici[i][j] && xRp <= nemici[i][j] + wR2 && yRp >= nemici[i][j] && yRp <= nemici[i][j] + hR2) {
-            //            sparato = false;
-            //            nemici[i][j] = -1000;  //tolgo nemico
-            //        }
-            //    }
-            //}
+            /*for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 10; j++) {
+                    if (xRp >= nemici[i][j] && xRp <= nemici[i][j] + wR2 && yRp >= nemici[i][j] && yRp <= nemici[i][j] + hR2) {
+                        sparato = false;
+                        nemici[i][j] = -1000;  //tolgo nemico
+                    }
+                }
+            }*/
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 10; j++) {
                     if (nemici[i][j] != -1000) {
@@ -179,6 +176,9 @@ void run() {
                     }
                 }
             }
+            DrawRectangle(xRp, yRp, Width, Height, Blue);
+            yRp -= 4;
+
             //vedo se colpisce difesa
             for (int i = 0; i < 4; i++) {
                 if (xRp + Width > difesa[i] && xRp < difesa[i] + wR3 && yRp + Height > yR3 && yRp < yR3 + hR3[i]) {
