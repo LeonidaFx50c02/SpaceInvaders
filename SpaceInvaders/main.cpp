@@ -25,10 +25,13 @@ void difese(int xR3, int  yR3, int wR3, int hR3[], int difesa[]);
 void menu();
 void left();
 bool replay();
-void reset(int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s);
+void reset(int& contatore, int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s);
 void run() {
     srand(time(NULL));
     menu();
+    //livelli
+    int livello = 1;
+
     //contatore
     string contatoreStr="";
     string frase = "PUNTEGGIO: ";
@@ -69,7 +72,9 @@ void run() {
     int yRp = IMM2D_HEIGHT - Height;
     bool sparato = false;
 
+
     //NEMICI
+    int contElapsed = 500;
     const Image Nemico = LoadImage(NemicoPng);
     int xR2 = 0, yR2 = 60, wR2 = ImageWidth(Nemico), hR2 = ImageHeight(Nemico);
     int nemicoDirezione = 4;
@@ -95,6 +100,15 @@ void run() {
     int contDifesa[4] = { 4,4,4,4 };
 
     while (true) {
+        //incremento livello
+        if (contatore==400)
+        {
+            reset(contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
+            livello++;
+            contElapsed--;
+        }
+
+
         char key = LastBufferedKey();
         if (key == Esc) {
             left();
@@ -135,7 +149,11 @@ void run() {
         auto now = high_resolution_clock::now();
         auto elapsed = duration_cast<milliseconds>(now - lastMoveTime).count();
 
-        if (elapsed > 500) {
+
+        //verifico il livello
+
+        //spostamento nemici
+        if (elapsed > contElapsed) {
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 10; j++) {
                     if (nemici[i][j] != -1000) {
@@ -153,8 +171,11 @@ void run() {
                                 bool v = replay();
                                 if (v==true)
                                 {
-                                    reset(contDifesa,  d, xR3,yR3,  wR3,  hR3,  difesa,  xR2,  yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
+                                    reset(contatore, contDifesa,  d, xR3,yR3,  wR3,  hR3,  difesa,  xR2,  yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
+                                    livello = 1;
+                                    contElapsed = 500;
                                 }
+
                             }
                         }
                     }
@@ -266,7 +287,9 @@ void run() {
                 bool v = replay();
                 if (v == true)
                 {
-                    reset(contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
+                    reset(contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
+                    livello = 1;
+                    contElapsed = 500;
                 }
             }
         }
@@ -341,11 +364,12 @@ bool replay()
     return y;
 }
 
-void reset(int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s)
+void reset(int& contatore, int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s)
 {
+
+    //punteggio
+    contatore = 0;
     //NEMICI
-    
-    
     xR2 = 0, yR2 = 60, wR2 = ImageWidth(Nemico), hR2 = ImageHeight(Nemico);
     nemicoDirezione = 4;
     //navicelle nemici
