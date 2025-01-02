@@ -19,6 +19,7 @@ static constexpr const char NavicellaPng[] = "Assets/navicella.png";
 static constexpr const char proiettileMioPng[] = "Assets/proiettileMio.png";
 static constexpr const char proiettileNemicoPng[] = "Assets/proiettileNemico.png";
 static constexpr const char NemicoPng[] = "Assets/Nemico.png";
+static constexpr const char SfondoPng[] = "Assets/sfondo.png";
 //Image navicella(const char navicella);
 void navicelleNemiche(int xR2, int  yR2, int wR2, int hR2, int nemici[4][10], Image Nemico);
 void difese(int xR3, int  yR3, int wR3, int hR3[], int difesa[]);
@@ -29,6 +30,8 @@ void reset(int& contatore, int contDifesa[], int& d, int& xR3, int& yR3, int& wR
 void run() {
     srand(time(NULL));
     menu();
+    //sfondo
+    const Image Sfondo = LoadImage(SfondoPng);
     //livelli
     int livello = 1;
 
@@ -114,6 +117,8 @@ void run() {
             left();
         }
         Clear(Black);// Pulisce lo schermo ad ogni ciclo
+        //disegno sfondo
+        DrawImage(0, 0, Sfondo);
         //DrawRectangle(0, 60, 640, 300, Green, Transparent); // parte nemici
         //DrawRectangle(0, 360, 640, 60, Blue, Transparent); // parte difesa
         //DrawRectangle(0, 420, 640, 60, Red); // parte navicella

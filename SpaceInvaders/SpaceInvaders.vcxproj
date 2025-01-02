@@ -141,6 +141,7 @@
     <Image Include="Assets\proiettileMio.png" />
     <Image Include="Assets\proiettileNemico.png" />
     <Image Include="Assets\replay.png" />
+    <Image Include="Assets\sfondo.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Music\01 - Opening Theme - Noriyuki Iwadare.flac" />
