@@ -197,7 +197,7 @@ void run() {
 
         //PROIETTILE
 
-        if (key == 'c' && !sparato) {
+        if (key == 32 && !sparato) {
             sparato = true;
             yRp = IMM2D_HEIGHT - Height-30;
             xRp = xR+10 /*+ (wR / 2)*/;
