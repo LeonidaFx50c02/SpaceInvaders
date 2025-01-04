@@ -221,8 +221,8 @@ void run() {
                 for (int j = 0; j < 10; j++) {
                     if (nemici[i][j] != -1000) {
                         int parteX = nemici[i][j];
-                        int parteY = yR2 + i * 30;
-                        if (xRp >= parteX && xRp <= parteX + wR2 && yRp - Height > parteY && yRp- Height < parteY + hR2) {
+                        int parteY = yR2 + i * 50;
+                        if (xRp >= parteX && xRp <= parteX + wR2 && yRp >= parteY && yRp <= parteY + hR2) {
                             sparato = false;
                             nemici[i][j] = -1000;
                             contatore += 10;
@@ -236,7 +236,7 @@ void run() {
 
             //vedo se colpisce difesa
             for (int i = 0; i < 4; i++) {
-                if (xRp + Width > difesa[i] && xRp < difesa[i] + wR3 && yRp + Height > yR3 && yRp < yR3 + hR3[i]) {
+                if (xRp + Width > difesa[i] && xRp < difesa[i] + wR3 && yRp - Height > yR3 && yRp-Height < yR3 + hR3[i]) {
                     sparato = false;
                     contDifesa[i]--;
                     hR3[i] -= 10;
@@ -251,7 +251,7 @@ void run() {
         auto now2 = high_resolution_clock::now();
         auto elapsed2 = duration_cast<milliseconds>(now2 - lastMoveTime2).count();
 
-        if (elapsed2 > 2500) {
+        if (elapsed2 > 4500) {
             sparatoN = true;
             lastMoveTime2 = now;
             int riga = rand() % 4;
@@ -271,7 +271,7 @@ void run() {
 
             //vedo se colpisce difesa
             for (int i = 0; i < 4; i++) {
-                if (xRPN >= difesa[i] && xRPN <= difesa[i] + wR3 && yRPN >= yR3 && yRPN <= yR3 + hR3[i]) {
+                if (xRPN >= difesa[i] && xRPN <= difesa[i] + wR3 && yRPN+Height >= yR3 && yRPN+ Height <= yR3 + hR3[i]) {
                     sparatoN = false;
                     contDifesa[i]--;
                     hR3[i] -= 10;
@@ -282,7 +282,7 @@ void run() {
             }
 
             //vedo se colpisce la mia navicella
-            if (xRPN >= xR && xRPN <= xR + wR && yRPN >= yR && yRPN <= yR + hR) {
+            if (xRPN >= xR && xRPN <= xR + wR && yRPN+Height >= yR && yRPN+ Height <= yR + hR) {
                 sparatoN = false;
                 Clear(Black);
                 Image overImg = LoadImage("Assets/gameover.png");
