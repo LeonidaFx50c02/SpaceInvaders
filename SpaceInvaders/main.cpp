@@ -26,7 +26,7 @@ void difese(int xR3, int  yR3, int wR3, int hR3[], int difesa[]);
 void menu();
 void left();
 bool replay();
-void reset(int& contatore, int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s);
+void reset(bool colpo[], int& contaColpi, int& contatore, int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s);
 void run() {
     srand(time(NULL));
     menu();
@@ -36,9 +36,9 @@ void run() {
     int livello = 1;
 
     //contatore
-    string contatoreStr="";
+    string contatoreStr = "";
     string frase = "PUNTEGGIO: ";
-    int  contatore=0;
+    int  contatore = 0;
 
     auto start = high_resolution_clock::now();
     //proiettili nemici
@@ -74,6 +74,17 @@ void run() {
     int xRp = xR;
     int yRp = IMM2D_HEIGHT - Height;
     bool sparato = false;
+    bool colpo[5];
+    int colpoX[5];
+    int colpoY[5];
+    int contaColpi = 0;
+    for (int i = 0; i < 5; i++)
+    {
+        colpo[i] = false;
+        colpoX[i] = xRp;
+        colpoY[i] = yRp;
+    }
+
 
 
     //NEMICI
@@ -104,9 +115,9 @@ void run() {
 
     while (true) {
         //incremento livello
-        if (contatore==400)
+        if (contatore == 400)
         {
-            reset(contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
+            reset(colpo, contaColpi, contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
             livello++;
             contElapsed--;
         }
@@ -125,13 +136,13 @@ void run() {
 
         // Disegna la navetta
         /*DrawRectangle(xR, yR, wR, hR, Red, Transparent);*/
-        DrawImage(xR , yR , navicella);
+        DrawImage(xR, yR, navicella);
 
         // Controllo del tasto premuto per il movimento della navetta
         char caratterePremuto = LastKey();
         // contatore punteggio
-        contatoreStr = frase+ to_string(contatore);
-        DrawString(110,15, contatoreStr.c_str(), "Arial", 20, Red, true);
+        contatoreStr = frase + to_string(contatore);
+        DrawString(110, 15, contatoreStr.c_str(), "Arial", 20, Red, true);
 
 
         if (caratterePremuto == Left) {
@@ -174,9 +185,9 @@ void run() {
                                 Wait(5000);
                                 Clear(Black);
                                 bool v = replay();
-                                if (v==true)
+                                if (v == true)
                                 {
-                                    reset(contatore, contDifesa,  d, xR3,yR3,  wR3,  hR3,  difesa,  xR2,  yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
+                                    reset(colpo, contaColpi, contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
                                     livello = 1;
                                     contElapsed = 500;
                                 }
@@ -197,51 +208,122 @@ void run() {
 
         //PROIETTILE
 
-        if (key == 32 && !sparato) {
-            sparato = true;
-            yRp = IMM2D_HEIGHT - Height-30;
-            xRp = xR+10 /*+ (wR / 2)*/;
-        }
-
-        if (sparato) {
-            if (yRp <= 0) {
-                sparato = false;
+        //if (key == 32 && !sparato) {
+        //    sparato = true;
+        //    yRp = IMM2D_HEIGHT - Height-30;
+        //    xRp = xR+10 /*+ (wR / 2)*/;
+        //}
+        bool verificoColpi = false;
+        for (int i = 0; i < contaColpi; i++)
+        {
+            if (colpo[i])
+            {
+                verificoColpi = false;
+                break;
             }
+            else {
+                verificoColpi = true;
+            }
+        }
+        if (verificoColpi)
+        {
+            contaColpi = 0;
+        }
+        if (key == 32 && contaColpi < 5) {
+            colpo[contaColpi] = true;
+            colpoY[contaColpi] = IMM2D_HEIGHT - Height - 30;
+            colpoX[contaColpi] = xR + 10;
+            contaColpi++;
+        }
+        for (int i = 0; i < contaColpi; i++)
+        {
+            if (colpo[i]) {
+                colpoY[i] -= 4;
 
-            //vedo se colpisce nemici
-            /*for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 10; j++) {
-                    if (xRp >= nemici[i][j] && xRp <= nemici[i][j] + wR2 && yRp >= nemici[i][j] && yRp <= nemici[i][j] + hR2) {
-                        sparato = false;
-                        nemici[i][j] = -1000;  //tolgo nemico
-                    }
+                if (colpoY[i] <= 0) {
+                    colpo[i] = false;
                 }
-            }*/
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 10; j++) {
-                    if (nemici[i][j] != -1000) {
-                        int parteX = nemici[i][j];
-                        int parteY = yR2 + i * 50;
-                        if (xRp >= parteX && xRp <= parteX + wR2 && yRp >= parteY && yRp <= parteY + hR2) {
-                            sparato = false;
-                            nemici[i][j] = -1000;
-                            contatore += 10;
-                            break;
+                DrawImage(colpoX[i], colpoY[i], proiettileMio);
+            }
+        }
+        for (int i = 0; i < contaColpi; i++)
+        {
+            if (colpo[i]) {
+
+                for (int j = 0; j < 4; j++) {
+                    for (int k = 0; k < 10; k++) {
+                        if (nemici[j][k] != -1000) {
+                            int parteX = nemici[j][k];
+                            int parteY = yR2 + j * 50;
+                            if (colpoX[i] >= parteX && colpoX[i] <= parteX + wR2 && colpoY[i] >= parteY && colpoY[i] <= parteY + hR2) {
+
+                                nemici[j][k] = -1000;
+                                colpo[i] = false;
+                                contatore += 10;
+                                break;
+                            }
                         }
                     }
                 }
             }
-            DrawImage(xRp, yRp,proiettileMio);
-            yRp -= 4;
+        }
 
-            //vedo se colpisce difesa
-            for (int i = 0; i < 4; i++) {
-                if (xRp + Width > difesa[i] && xRp < difesa[i] + wR3 && yRp - Height > yR3 && yRp-Height < yR3 + hR3[i]) {
-                    sparato = false;
-                    contDifesa[i]--;
-                    hR3[i] -= 10;
-                    if (contDifesa[i] == 0) {
-                        difesa[i] = -10000;  //tolgo difesa;
+        //if (sparato) {
+        //    if (yRp <= 0) {
+        //        sparato = false;
+        //    }
+
+        //    //vedo se colpisce nemici
+        //    /*for (int i = 0; i < 4; i++) {
+        //        for (int j = 0; j < 10; j++) {
+        //            if (xRp >= nemici[i][j] && xRp <= nemici[i][j] + wR2 && yRp >= nemici[i][j] && yRp <= nemici[i][j] + hR2) {
+        //                sparato = false;
+        //                nemici[i][j] = -1000;  //tolgo nemico
+        //            }
+        //        }
+        //    }*/
+        //    for (int i = 0; i < 4; i++) {
+        //        for (int j = 0; j < 10; j++) {
+        //            if (nemici[i][j] != -1000) {
+        //                int parteX = nemici[i][j];
+        //                int parteY = yR2 + i * 50;
+        //                if (xRp >= parteX && xRp <= parteX + wR2 && yRp >= parteY && yRp <= parteY + hR2) {
+        //                    sparato = false;
+        //                    nemici[i][j] = -1000;
+        //                    contatore += 10;
+        //                    break;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    DrawImage(xRp, yRp,proiettileMio);
+        //    yRp -= 4;
+
+        //    //vedo se colpisce difesa
+        //    for (int i = 0; i < 4; i++) {
+        //        if (xRp + Width > difesa[i] && xRp < difesa[i] + wR3 && yRp - Height > yR3 && yRp-Height < yR3 + hR3[i]) {
+        //            sparato = false;
+        //            contDifesa[i]--;
+        //            hR3[i] -= 10;
+        //            if (contDifesa[i] == 0) {
+        //                difesa[i] = -10000;  //tolgo difesa;
+        //            }
+        //        }
+        //    }
+        //}
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (colpo[i]) {
+                for (int j = 0; j < 4; j++)
+                {
+                    if (colpoX[i] + Width > difesa[j] && colpoX[i] < difesa[j] + wR3 && colpoY[i] - Height > yR3 && colpoY[i] - Height < yR3 + hR3[j]) {
+                        colpo[i] = false;
+                        contDifesa[j]--;
+                        hR3[j] -= 10;
+                        if (contDifesa[j] == 0) {
+                            difesa[j] = -10000;  //tolgo difesa;
+                        }
                     }
                 }
             }
@@ -263,7 +345,7 @@ void run() {
             }
         }
         if (sparatoN) {
-            DrawImage(xRPN, yRPN,proiettileNemico);
+            DrawImage(xRPN, yRPN, proiettileNemico);
             yRPN += 4;
             if (yRPN >= IMM2D_HEIGHT) {
                 sparatoN = false;
@@ -271,7 +353,7 @@ void run() {
 
             //vedo se colpisce difesa
             for (int i = 0; i < 4; i++) {
-                if (xRPN >= difesa[i] && xRPN <= difesa[i] + wR3 && yRPN+Height >= yR3 && yRPN+ Height <= yR3 + hR3[i]) {
+                if (xRPN >= difesa[i] && xRPN <= difesa[i] + wR3 && yRPN + Height >= yR3 && yRPN + Height <= yR3 + hR3[i]) {
                     sparatoN = false;
                     contDifesa[i]--;
                     hR3[i] -= 10;
@@ -282,7 +364,7 @@ void run() {
             }
 
             //vedo se colpisce la mia navicella
-            if (xRPN >= xR && xRPN <= xR + wR && yRPN+Height >= yR && yRPN+ Height <= yR + hR) {
+            if (xRPN >= xR && xRPN <= xR + wR && yRPN + Height >= yR && yRPN + Height <= yR + hR) {
                 sparatoN = false;
                 Clear(Black);
                 Image overImg = LoadImage("Assets/gameover.png");
@@ -292,7 +374,7 @@ void run() {
                 bool v = replay();
                 if (v == true)
                 {
-                    reset(contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
+                    reset(colpo, contaColpi, contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
                     livello = 1;
                     contElapsed = 500;
                 }
@@ -369,9 +451,14 @@ bool replay()
     return y;
 }
 
-void reset(int& contatore, int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s)
+void reset(bool colpo[], int& contaColpi, int& contatore, int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s)
 {
-
+    //proiettili
+    contaColpi = 0;
+    for (int i = 0; i < 5; i++)
+    {
+        colpo[i] = false;
+    }
     //punteggio
     contatore = 0;
     //NEMICI
@@ -396,7 +483,7 @@ void reset(int& contatore, int contDifesa[], int& d, int& xR3, int& yR3, int& wR
     }
 
     //difesa
-    d = 150;   
+    d = 150;
     difesa[0] = xR3;
     difesa[1] = xR3 + d * 1;
     difesa[2] = xR3 + d * 2;
