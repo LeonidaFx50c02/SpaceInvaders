@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="File di risorse\Music">
+      <UniqueIdentifier>{1a534f9f-95ff-4b61-88d5-10c22e4698fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File di risorse\Assets">
+      <UniqueIdentifier>{02b9f481-87d0-4f10-9d43-2a3500a1605a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File di risorse\Sound">
+      <UniqueIdentifier>{cdb6ebea-e7bd-4f55-90c2-6dcacc84ae7e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="immediate2d.h">
@@ -25,43 +34,67 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Assets\HomeSpace.png">
-      <Filter>File di risorse</Filter>
-    </Image>
-    <Image Include="Assets\navicella.png">
-      <Filter>File di risorse</Filter>
-    </Image>
     <Image Include="Assets\gameover.png">
-      <Filter>File di risorse</Filter>
+      <Filter>File di risorse\Assets</Filter>
+    </Image>
+    <Image Include="Assets\HomeSpace.png">
+      <Filter>File di risorse\Assets</Filter>
     </Image>
     <Image Include="Assets\left.png">
-      <Filter>File di risorse</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </Image>
-    <Image Include="Assets\replay.png">
-      <Filter>File di risorse</Filter>
-    </Image>
-    <Image Include="Assets\proiettileNemico.png">
-      <Filter>File di risorse</Filter>
-    </Image>
-    <Image Include="Assets\proiettileMio.png">
-      <Filter>File di risorse</Filter>
+    <Image Include="Assets\navicella.png">
+      <Filter>File di risorse\Assets</Filter>
     </Image>
     <Image Include="Assets\nemico.png">
-      <Filter>File di risorse</Filter>
-    </Image>
-    <Image Include="Assets\sfondo.png">
-      <Filter>File di risorse</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </Image>
     <Image Include="Assets\nemico2.png">
-      <Filter>File di risorse</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </Image>
     <Image Include="Assets\nemico3.png">
-      <Filter>File di risorse</Filter>
+      <Filter>File di risorse\Assets</Filter>
+    </Image>
+    <Image Include="Assets\proiettileMio.png">
+      <Filter>File di risorse\Assets</Filter>
+    </Image>
+    <Image Include="Assets\proiettileNemico.png">
+      <Filter>File di risorse\Assets</Filter>
+    </Image>
+    <Image Include="Assets\replay.png">
+      <Filter>File di risorse\Assets</Filter>
+    </Image>
+    <Image Include="Assets\sfondo.png">
+      <Filter>File di risorse\Assets</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Music\01 - Opening Theme - Noriyuki Iwadare.flac">
-      <Filter>File di risorse</Filter>
-    </None>
+    <Media Include="Sound\shoot.wav">
+      <Filter>File di risorse\Sound</Filter>
+    </Media>
+    <Media Include="Music\01 - Opening Theme - Noriyuki Iwadare.wav">
+      <Filter>File di risorse\Music</Filter>
+    </Media>
+    <Media Include="Music\02 - Rounds 1 - Noriyuki Iwadare.wav">
+      <Filter>File di risorse\Music</Filter>
+    </Media>
+    <Media Include="Music\03 - Rounds 2 - Noriyuki Iwadare.wav">
+      <Filter>File di risorse\Music</Filter>
+    </Media>
+    <Media Include="Music\04 - Rounds 3 - Noriyuki Iwadare.wav">
+      <Filter>File di risorse\Music</Filter>
+    </Media>
+    <Media Include="Music\05 - Rounds 4 - Noriyuki Iwadare.wav">
+      <Filter>File di risorse\Music</Filter>
+    </Media>
+    <Media Include="Music\06 - Rounds 5 - Noriyuki Iwadare.wav">
+      <Filter>File di risorse\Music</Filter>
+    </Media>
+    <Media Include="Music\07 - Rounds 6 - Noriyuki Iwadare.wav">
+      <Filter>File di risorse\Music</Filter>
+    </Media>
+    <Media Include="Music\11 - Game Over - Noriyuki Iwadare.wav">
+      <Filter>File di risorse\Music</Filter>
+    </Media>
   </ItemGroup>
 </Project>

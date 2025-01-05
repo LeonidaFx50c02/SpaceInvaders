@@ -38,9 +38,4 @@
       <Filter>File di risorse</Filter>
     </Image>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Music\01 - Opening Theme - Noriyuki Iwadare.flac">
-      <Filter>File di risorse</Filter>
-    </None>
-  </ItemGroup>
 </Project>

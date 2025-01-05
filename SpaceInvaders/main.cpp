@@ -9,10 +9,15 @@
 #include <thread>
 #include <cstdlib>
 #include <ctime> 
+#include <mmsystem.h>
+#include <Windows.h>
+
+#pragma comment(lib, "winmm.lib") //dal video https://www.youtube.com/watch?v=CrPHVvgENq0&ab_channel=MaxO%27Didily
 
 using namespace std;
 using namespace std::chrono;
 
+DWORD volume = 0x70007000;
 Image navicella = LoadImage("Assets/navicella.png");
 using Image = int;
 static constexpr const char NavicellaPng[] = "Assets/navicella.png";
@@ -28,7 +33,9 @@ void difese(int xR3, int  yR3, int wR3, int hR3[], int difesa[]);
 void menu();
 void left();
 bool replay();
-void reset(bool colpo[], int& contaColpi, int& contatore, int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s);
+void reset(bool colpo[], int& contaColpi, int& contatore, int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s, bool isChanged[]);
+void playSound(int livello, int contatore, bool isChanged[]);
+void bulletSound() { PlaySound(TEXT("Sound/Shoot.wav"), NULL, SND_FILENAME | SND_ASYNC); }
 void run() {
     srand(time(NULL));
     menu();
@@ -36,11 +43,13 @@ void run() {
     const Image Sfondo = LoadImage(SfondoPng);
     //livelli
     int livello = 1;
-
+    bool isChanged[7] = { false };
     //contatore
     string contatoreStr = "";
-    string frase = "PUNTEGGIO: ";
+    string frase = "POINTS: ";
     int  contatore = 0;
+
+    string point_Over = "";
 
     auto start = high_resolution_clock::now();
     //proiettili nemici
@@ -119,9 +128,10 @@ void run() {
 
     while (true) {
         //incremento livello
+        playSound(livello, contatore, isChanged);
         if (contatore == 400)
         {
-            reset(colpo, contaColpi, contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
+            reset(colpo, contaColpi, contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s, isChanged);
             livello++;
             contElapsed--;
         }
@@ -146,7 +156,7 @@ void run() {
         char caratterePremuto = LastKey();
         // contatore punteggio
         contatoreStr = frase + to_string(contatore);
-        DrawString(110, 15, contatoreStr.c_str(), "Arial", 20, Red, true);
+        DrawString(110, 15, contatoreStr.c_str(), "Arcade Normal", 15, Red, true);
 
 
         if (caratterePremuto == Left) {
@@ -191,7 +201,7 @@ void run() {
                                 bool v = replay();
                                 if (v == true)
                                 {
-                                    reset(colpo, contaColpi, contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
+                                    reset(colpo, contaColpi, contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s, isChanged);
                                     livello = 1;
                                     contElapsed = 500;
                                 }
@@ -259,7 +269,7 @@ void run() {
                 if (colpoY[i] <= 0) {
                     colpo[i] = false;
                 }
-                DrawImage(colpoX[i], colpoY[i], proiettileMio);
+                DrawImage(colpoX[i], colpoY[i], proiettileMio); 
             }
         }
         for (int i = 0; i < contaColpi; i++)
@@ -284,6 +294,8 @@ void run() {
             }
         }
 
+        point_Over = to_string(contatore);
+        
         //if (sparato) {
         //    if (yRp <= 0) {
         //        sparato = false;
@@ -384,13 +396,15 @@ void run() {
                 sparatoN = false;
                 Clear(Black);
                 Image overImg = LoadImage("Assets/gameover.png");
-                DrawImage(IMM2D_WIDTH / 12, IMM2D_HEIGHT / 12, overImg);
+                PlaySound(TEXT("Music/11 - Game Over - Noriyuki Iwadare.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                DrawImage(0, 0, overImg);
+                DrawString (350, 244, point_Over.c_str(), "Arcade Normal", 20, White, true);
                 Wait(5000);
                 Clear(Black);
                 bool v = replay();
                 if (v == true)
                 {
-                    reset(colpo, contaColpi, contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s);
+                    reset(colpo, contaColpi, contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s, isChanged);
                     livello = 1;
                     contElapsed = 500;
                 }
@@ -436,10 +450,13 @@ void difese(int xR3, int  yR3, int wR3, int hR3[], int difesa[]) {
 
 void menu() {
     Image Home = LoadImage("Assets/HomeSpace.png");
-    DrawImage(IMM2D_WIDTH / 52, IMM2D_HEIGHT / 52, Home);
+    DrawImage(0, 0, Home);
+    waveOutSetVolume(0, volume);
+    PlaySound(TEXT("Music/01 - Opening Theme - Noriyuki Iwadare.wav"), NULL, SND_FILENAME | SND_ASYNC);
     while (true) {
         char key = LastKey();
         if (key == Enter) {
+            PlaySound(NULL, NULL, SND_FILENAME);
             break;
         }
     }
@@ -478,7 +495,7 @@ bool replay()
     return y;
 }
 
-void reset(bool colpo[], int& contaColpi, int& contatore, int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s)
+void reset(bool colpo[], int& contaColpi, int& contatore, int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s, bool isChanged[])
 {
     //proiettili
     contaColpi = 0;
@@ -519,5 +536,40 @@ void reset(bool colpo[], int& contaColpi, int& contatore, int contDifesa[], int&
     {
         contDifesa[i] = 40;
     }
+    
+    for (int i = 0; i < 7; i++) {
+        isChanged[i] = false;
+    }
+}
 
+void playSound(int livello, int contatore, bool isChanged[]) {
+    if (isChanged[livello] == false) {
+            switch (livello) {
+                case 1:
+                    PlaySound(TEXT("Music/02 - Rounds 1 - Noriyuki Iwadare.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                    isChanged[livello] = true;
+                    break;
+                case 2:
+                    PlaySound(TEXT("Music/03 - Rounds 2 - Noriyuki Iwadare.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                    isChanged[livello] = true;
+                    break;
+                case 3:
+                    PlaySound(TEXT("Music/04 - Rounds 3 - Noriyuki Iwadare.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                    isChanged[livello] = true;
+                    break;
+                case 4:
+                    PlaySound(TEXT("Music/05 - Rounds 4 - Noriyuki Iwadare.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                    isChanged[livello] = true;
+                    break;
+                case 5:
+                    PlaySound(TEXT("Music/06 - Rounds 5 - Noriyuki Iwadare.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                    isChanged[livello] = true;
+                    break;
+                case 6:
+                    PlaySound(TEXT("Music/07 - Rounds 6 - Noriyuki Iwadare.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                    isChanged[livello] = true;
+                    break;
+            }
+    }
+    
 }

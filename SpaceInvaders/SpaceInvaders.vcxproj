@@ -146,7 +146,15 @@
     <Image Include="Assets\sfondo.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Music\01 - Opening Theme - Noriyuki Iwadare.flac" />
+    <Media Include="Music\01 - Opening Theme - Noriyuki Iwadare.wav" />
+    <Media Include="Music\02 - Rounds 1 - Noriyuki Iwadare.wav" />
+    <Media Include="Music\03 - Rounds 2 - Noriyuki Iwadare.wav" />
+    <Media Include="Music\04 - Rounds 3 - Noriyuki Iwadare.wav" />
+    <Media Include="Music\05 - Rounds 4 - Noriyuki Iwadare.wav" />
+    <Media Include="Music\06 - Rounds 5 - Noriyuki Iwadare.wav" />
+    <Media Include="Music\07 - Rounds 6 - Noriyuki Iwadare.wav" />
+    <Media Include="Music\11 - Game Over - Noriyuki Iwadare.wav" />
+    <Media Include="Sound\shoot.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
