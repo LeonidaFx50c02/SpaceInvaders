@@ -48,6 +48,7 @@ void run() {
     string contatoreStr = "";
     string frase = "POINTS: ";
     int  contatore = 0;
+    int supportoContatore = 0;
 
     string point_Over = "";
 
@@ -129,9 +130,11 @@ void run() {
     while (true) {
         //incremento livello
         playSound(livello, contatore, isChanged);
-        if (contatore == 400)
+        if (contatore == (400*livello))
         {
+            supportoContatore = contatore;
             reset(colpo, contaColpi, contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s, isChanged);
+            contatore = supportoContatore;
             livello++;
             contElapsed--;
         }
