@@ -52,6 +52,12 @@
     <Image Include="Assets\sfondo.png">
       <Filter>File di risorse</Filter>
     </Image>
+    <Image Include="Assets\nemico2.png">
+      <Filter>File di risorse</Filter>
+    </Image>
+    <Image Include="Assets\nemico3.png">
+      <Filter>File di risorse</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Music\01 - Opening Theme - Noriyuki Iwadare.flac">

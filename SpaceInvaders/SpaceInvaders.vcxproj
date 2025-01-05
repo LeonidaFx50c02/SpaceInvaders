@@ -138,6 +138,8 @@
     <Image Include="Assets\left.png" />
     <Image Include="Assets\navicella.png" />
     <Image Include="Assets\nemico.png" />
+    <Image Include="Assets\nemico2.png" />
+    <Image Include="Assets\nemico3.png" />
     <Image Include="Assets\proiettileMio.png" />
     <Image Include="Assets\proiettileNemico.png" />
     <Image Include="Assets\replay.png" />

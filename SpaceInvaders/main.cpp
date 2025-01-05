@@ -19,9 +19,11 @@ static constexpr const char NavicellaPng[] = "Assets/navicella.png";
 static constexpr const char proiettileMioPng[] = "Assets/proiettileMio.png";
 static constexpr const char proiettileNemicoPng[] = "Assets/proiettileNemico.png";
 static constexpr const char NemicoPng[] = "Assets/Nemico.png";
+static constexpr const char Nemico2Png[] = "Assets/Nemico2.png";
+static constexpr const char Nemico3Png[] = "Assets/Nemico3.png";
 static constexpr const char SfondoPng[] = "Assets/sfondo.png";
 //Image navicella(const char navicella);
-void navicelleNemiche(int xR2, int  yR2, int wR2, int hR2, int nemici[4][10], Image Nemico);
+void navicelleNemiche(int livello, int xR2, int yR2, int wR2, int hR2, int nemici[4][10], Image Nemico, Image Nemico2, Image Nemico3);
 void difese(int xR3, int  yR3, int wR3, int hR3[], int difesa[]);
 void menu();
 void left();
@@ -90,6 +92,8 @@ void run() {
     //NEMICI
     int contElapsed = 500;
     const Image Nemico = LoadImage(NemicoPng);
+    const Image Nemico2 = LoadImage(Nemico2Png);
+    const Image Nemico3 = LoadImage(Nemico3Png);
     int xR2 = 0, yR2 = 60, wR2 = ImageWidth(Nemico), hR2 = ImageHeight(Nemico);
     int nemicoDirezione = 4;
     //navicelle nemici
@@ -204,7 +208,7 @@ void run() {
 
         //navicelle nemiche
 
-        navicelleNemiche(xR2, yR2, wR2, hR2, nemici, Nemico);
+        navicelleNemiche(livello, xR2, yR2, wR2, hR2, nemici, Nemico, Nemico2, Nemico3);
 
         //PROIETTILE
 
@@ -234,6 +238,18 @@ void run() {
             colpoY[contaColpi] = IMM2D_HEIGHT - Height - 30;
             colpoX[contaColpi] = xR + 10;
             contaColpi++;
+        }
+        if (key==32)
+        {
+            for (int i = 0; i < 5; i++) {   
+                if (!colpo[i])
+                {
+                    colpo[i] = true;
+                    colpoY[i] = IMM2D_HEIGHT - Height - 30;
+                    colpoX[i] = xR + 10;
+                    break;
+                }
+            }
         }
         for (int i = 0; i < contaColpi; i++)
         {
@@ -386,11 +402,22 @@ void run() {
 
 
 
-void navicelleNemiche(int xR2, int yR2, int wR2, int hR2, int nemici[4][10], Image Nemico) {
+void navicelleNemiche(int livello, int xR2, int yR2, int wR2, int hR2, int nemici[4][10], Image Nemico, Image Nemico2, Image Nemico3) {
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 10; j++) {
             if (nemici[i][j] != -1000) {
-                DrawImage(nemici[i][j], yR2, Nemico);
+                if (livello<3)
+                {
+                    DrawImage(nemici[i][j], yR2, Nemico);
+                }
+                else if (livello<5)
+                {
+                    DrawImage(nemici[i][j], yR2, Nemico2);
+                }
+                else {
+                    DrawImage(nemici[i][j], yR2, Nemico3);
+                }
+                
             }
         }
         yR2 += 50;
