@@ -31,15 +31,17 @@ static constexpr const char SfondoPng[] = "Assets/sfondo.png";
 void navicelleNemiche(int livello, int xR2, int yR2, int wR2, int hR2, int nemici[4][10], Image Nemico, Image Nemico2, Image Nemico3);
 void difese(int xR3, int  yR3, int wR3, int hR3[], int difesa[]);
 void menu();
+void keyMap();
 void left();
 bool replay();
 void reset(bool colpo[], int& contaColpi, int& contatore, int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s, bool isChanged[]);
 void playSound(int livello, int contatore, bool isChanged[]);
-void bulletSound() { PlaySound(TEXT("Sound/Shoot.wav"), NULL, SND_FILENAME | SND_ASYNC); }
-bool win();
+void win();
 void run() {
     srand(time(NULL));
     menu();
+    Clear();
+    keyMap();
     //sfondo
     const Image Sfondo = LoadImage(SfondoPng);
     //livelli
@@ -144,6 +146,7 @@ void run() {
             if (livello==6)
             {
                 Clear(Black);
+                win();
                 bool h = replay();
                 if (h == true)
                 {
@@ -483,11 +486,27 @@ void menu() {
     while (true) {
         char key = LastKey();
         if (key == Enter) {
-            PlaySound(NULL, NULL, SND_FILENAME);
             break;
         }
     }
 }
+
+void keyMap() {
+    Image keyMap = LoadImage("Assets/key_map.png");
+    DrawImage(0, 0, keyMap);
+    ImageWidth(100);
+    ImageHeight(100);
+    while (true) {
+        ClearInputBuffer();
+        char key = LastBufferedKey();
+        if (key == Enter) {
+            PlaySound(NULL, NULL, SND_FILENAME);
+            break;
+        }
+    }
+
+}
+
 
 void left() {
     Image leftImg = LoadImage("Assets/left.png");
@@ -601,21 +620,10 @@ void playSound(int livello, int contatore, bool isChanged[]) {
     
 }
 
-bool win()
-{
-    bool y = false;
-    Image Win = LoadImage("Assets/Win.png");
-    DrawImage(IMM2D_WIDTH / 12, IMM2D_HEIGHT / 12, Win);
-    while (true) {
-        char key = LastKey();
-        if (key == 'y') {
-            y = true;
-            break;
-
-        }
-        else if (key == 'n') {
-            CloseWindow();
-        }
-    }
-    return y;
+void win() {
+    Image Win = LoadImage("Assets/win.png");
+    DrawImage(0, 0, Win);
+    PlaySound(TEXT("Music/win.wav"), NULL, SND_FILENAME | SND_ASYNC);
+    Wait(5000);
+    PlaySound(NULL, NULL, SND_FILENAME);
 }

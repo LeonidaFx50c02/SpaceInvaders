@@ -134,7 +134,13 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\gameover.png" />
-    <Image Include="Assets\HomeSpace.png" />
+    <Image Include="Assets\HomeSpace.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Image>
+    <Image Include="Assets\key_map.png" />
     <Image Include="Assets\left.png" />
     <Image Include="Assets\navicella.png" />
     <Image Include="Assets\nemico.png" />
@@ -144,9 +150,15 @@
     <Image Include="Assets\proiettileNemico.png" />
     <Image Include="Assets\replay.png" />
     <Image Include="Assets\sfondo.png" />
+    <Image Include="Assets\win.png" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="Music\01 - Opening Theme - Noriyuki Iwadare.wav" />
+    <Media Include="Music\01 - Opening Theme - Noriyuki Iwadare.wav">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">si</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">si</DeploymentContent>
+    </Media>
     <Media Include="Music\02 - Rounds 1 - Noriyuki Iwadare.wav" />
     <Media Include="Music\03 - Rounds 2 - Noriyuki Iwadare.wav" />
     <Media Include="Music\04 - Rounds 3 - Noriyuki Iwadare.wav" />
@@ -154,7 +166,7 @@
     <Media Include="Music\06 - Rounds 5 - Noriyuki Iwadare.wav" />
     <Media Include="Music\07 - Rounds 6 - Noriyuki Iwadare.wav" />
     <Media Include="Music\11 - Game Over - Noriyuki Iwadare.wav" />
-    <Media Include="Sound\shoot.wav" />
+    <Media Include="Music\win.wav" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\ARCADE_N.TTF" />

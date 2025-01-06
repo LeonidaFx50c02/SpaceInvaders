@@ -19,9 +19,6 @@
     <Filter Include="File di risorse\Assets">
       <UniqueIdentifier>{02b9f481-87d0-4f10-9d43-2a3500a1605a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="File di risorse\Sound">
-      <UniqueIdentifier>{cdb6ebea-e7bd-4f55-90c2-6dcacc84ae7e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="immediate2d.h">
@@ -67,11 +64,14 @@
     <Image Include="Assets\sfondo.png">
       <Filter>File di risorse\Assets</Filter>
     </Image>
+    <Image Include="Assets\key_map.png">
+      <Filter>File di risorse\Assets</Filter>
+    </Image>
+    <Image Include="Assets\win.png">
+      <Filter>File di risorse\Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="Sound\shoot.wav">
-      <Filter>File di risorse\Sound</Filter>
-    </Media>
     <Media Include="Music\01 - Opening Theme - Noriyuki Iwadare.wav">
       <Filter>File di risorse\Music</Filter>
     </Media>
@@ -94,6 +94,9 @@
       <Filter>File di risorse\Music</Filter>
     </Media>
     <Media Include="Music\11 - Game Over - Noriyuki Iwadare.wav">
+      <Filter>File di risorse\Music</Filter>
+    </Media>
+    <Media Include="Music\win.wav">
       <Filter>File di risorse\Music</Filter>
     </Media>
   </ItemGroup>
