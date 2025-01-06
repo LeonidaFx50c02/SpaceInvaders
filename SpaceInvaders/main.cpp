@@ -52,6 +52,9 @@ void run() {
 
     string point_Over = "";
 
+    string livelloScritta = "";
+    string fraseLiv = "LIVELLO: ";
+
     auto start = high_resolution_clock::now();
     //proiettili nemici
     auto start2 = high_resolution_clock::now();
@@ -160,7 +163,9 @@ void run() {
         // contatore punteggio
         contatoreStr = frase + to_string(contatore);
         DrawString(110, 15, contatoreStr.c_str(), "Arcade Normal", 15, Red, true);
-
+        //livello scritta
+        livelloScritta = fraseLiv +to_string(livello);
+        DrawString(520, 15, livelloScritta.c_str(), "Arcade Normal", 15, Red, true);
 
         if (caratterePremuto == Left) {
             xR -= 10;
