@@ -97,4 +97,9 @@
       <Filter>File di risorse\Music</Filter>
     </Media>
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="Assets\ARCADE_N.TTF">
+      <Filter>File di risorse\Assets</Filter>
+    </Font>
+  </ItemGroup>
 </Project>

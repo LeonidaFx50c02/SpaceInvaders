@@ -156,6 +156,9 @@
     <Media Include="Music\11 - Game Over - Noriyuki Iwadare.wav" />
     <Media Include="Sound\shoot.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="Assets\ARCADE_N.TTF" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
