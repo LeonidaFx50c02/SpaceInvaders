@@ -52,6 +52,9 @@ void run() {
 
     string point_Over = "";
 
+    string livelloScritta = "";
+    string fraseLiv = "LIVELLO: ";
+
     auto start = high_resolution_clock::now();
     //proiettili nemici
     auto start2 = high_resolution_clock::now();
@@ -136,7 +139,7 @@ void run() {
             reset(colpo, contaColpi, contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s, isChanged);
             contatore = supportoContatore;
             livello++;
-            contElapsed--;
+            contElapsed= contElapsed-100;
         }
 
 
@@ -160,7 +163,9 @@ void run() {
         // contatore punteggio
         contatoreStr = frase + to_string(contatore);
         DrawString(110, 15, contatoreStr.c_str(), "Arcade Normal", 15, Red, true);
-
+        //livello scritta
+        livelloScritta = fraseLiv +to_string(livello);
+        DrawString(520, 15, livelloScritta.c_str(), "Arcade Normal", 15, Red, true);
 
         if (caratterePremuto == Left) {
             xR -= 10;
@@ -198,7 +203,9 @@ void run() {
                             {
                                 Clear(Black);
                                 Image overImg = LoadImage("Assets/gameover.png");
-                                DrawImage(IMM2D_WIDTH / 12, IMM2D_HEIGHT / 12, overImg);
+                                PlaySound(TEXT("Music/11 - Game Over - Noriyuki Iwadare.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                                DrawImage(0, 0, overImg);
+                                DrawString(350, 244, point_Over.c_str(), "Arcade Normal", 20, White, true);
                                 Wait(5000);
                                 Clear(Black);
                                 bool v = replay();
