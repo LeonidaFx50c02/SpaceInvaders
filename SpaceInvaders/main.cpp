@@ -200,7 +200,7 @@ void run() {
         auto elapsed = duration_cast<milliseconds>(now - lastMoveTime).count();
 
 
-        //verifico il livello
+       
 
         //spostamento nemici
         if (elapsed > contElapsed) {
@@ -211,24 +211,29 @@ void run() {
                         if (nemici[i][j] + wR2 > IMM2D_WIDTH || nemici[i][j] < 0) {
                             nemicoDirezione *= -1; // Cambia direzione
                             yR2 += 30; // Scendi di una riga
-                            if ((yR2 + ((20 * 4) + (30 * 3))) >= 360)
+                            
+                        }
+                    }
+                    if (nemici[3-i][j] != -1000)
+                    {
+                        int parte1Y = yR2 + ((3 - i) * 50);
+                        if (parte1Y >= 360)
+                        {
+                            Clear(Black);
+                            Image overImg = LoadImage("Assets/gameover.png");
+                            PlaySound(TEXT("Music/11 - Game Over - Noriyuki Iwadare.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                            DrawImage(0, 0, overImg);
+                            DrawString(350, 244, point_Over.c_str(), "Arcade Normal", 20, White, true);
+                            Wait(5000);
+                            Clear(Black);
+                            bool v = replay();
+                            if (v == true)
                             {
-                                Clear(Black);
-                                Image overImg = LoadImage("Assets/gameover.png");
-                                PlaySound(TEXT("Music/11 - Game Over - Noriyuki Iwadare.wav"), NULL, SND_FILENAME | SND_ASYNC);
-                                DrawImage(0, 0, overImg);
-                                DrawString(350, 244, point_Over.c_str(), "Arcade Normal", 20, White, true);
-                                Wait(5000);
-                                Clear(Black);
-                                bool v = replay();
-                                if (v == true)
-                                {
-                                    reset(colpo, contaColpi, contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s, isChanged);
-                                    livello = 1;
-                                    contElapsed = 500;
-                                }
-
+                                reset(colpo, contaColpi, contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s, isChanged);
+                                livello = 1;
+                                contElapsed = 500;
                             }
+
                         }
                     }
                 }
