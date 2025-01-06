@@ -36,6 +36,7 @@ bool replay();
 void reset(bool colpo[], int& contaColpi, int& contatore, int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s, bool isChanged[]);
 void playSound(int livello, int contatore, bool isChanged[]);
 void bulletSound() { PlaySound(TEXT("Sound/Shoot.wav"), NULL, SND_FILENAME | SND_ASYNC); }
+bool win();
 void run() {
     srand(time(NULL));
     menu();
@@ -140,6 +141,17 @@ void run() {
             contatore = supportoContatore;
             livello++;
             contElapsed= contElapsed-100;
+            if (livello==6)
+            {
+                Clear(Black);
+                bool h = replay();
+                if (h == true)
+                {
+                    reset(colpo, contaColpi, contatore, contDifesa, d, xR3, yR3, wR3, hR3, difesa, xR2, yR2, wR2, hR2, nemici, Nemico, nemicoDirezione, s, isChanged);
+                    livello = 1;
+                    contElapsed = 500;
+                }
+            }
         }
 
 
@@ -582,4 +594,23 @@ void playSound(int livello, int contatore, bool isChanged[]) {
             }
     }
     
+}
+
+bool win()
+{
+    bool y = false;
+    Image Win = LoadImage("Assets/Win.png");
+    DrawImage(IMM2D_WIDTH / 12, IMM2D_HEIGHT / 12, Win);
+    while (true) {
+        char key = LastKey();
+        if (key == 'y') {
+            y = true;
+            break;
+
+        }
+        else if (key == 'n') {
+            CloseWindow();
+        }
+    }
+    return y;
 }
