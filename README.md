@@ -1,5 +1,5 @@
 # SPACE INVADERS
-## Space Invaders è un gioco sviluppato da Gucciardi Leonida e Russo Giovanni.
+## Space Invaders è un gioco sviluppato da Gucciardi Leonida e Russo Giovanni adattandosi all'originale Space Invaders del 1978 disegnato da Tomohiro Nishikado e sviluppato da Taito Corporation.
 ### Per avere una migliore esperienza di gioco è consigliabile scaricare il file .ttf in SpaceInvaders/Assets/ARCADE_N.TTF per il font.
 ### Work:
 * Enemy Logic: Gucciardi Leonida and Russo Giovanni
