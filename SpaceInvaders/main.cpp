@@ -36,7 +36,7 @@ void left();
 bool replay();
 void reset(bool colpo[], int& contaColpi, int& contatore, int contDifesa[], int& d, int& xR3, int& yR3, int& wR3, int hR3[], int difesa[], int& xR2, int& yR2, int& wR2, int& hR2, int nemici[4][10], Image Nemico, int& nemicoDirezione, int& s, bool isChanged[]);
 void playSound(int livello, int contatore, bool isChanged[]);
-void win();
+void win(string point_Over);
 void run() {
     srand(time(NULL));
     menu();
@@ -146,7 +146,7 @@ void run() {
             if (livello==6)
             {
                 Clear(Black);
-                win();
+                win(point_Over);
                 bool h = replay();
                 if (h == true)
                 {
@@ -226,7 +226,7 @@ void run() {
                             Image overImg = LoadImage("Assets/gameover.png");
                             PlaySound(TEXT("Music/11 - Game Over - Noriyuki Iwadare.wav"), NULL, SND_FILENAME | SND_ASYNC);
                             DrawImage(0, 0, overImg);
-                            DrawString(350, 244, point_Over.c_str(), "Arcade Normal", 20, White, true);
+                            DrawString(410, 244, point_Over.c_str(), "Arcade Normal", 20, White, true);
                             Wait(5000);
                             Clear(Black);
                             bool v = replay();
@@ -428,7 +428,7 @@ void run() {
                 Image overImg = LoadImage("Assets/gameover.png");
                 PlaySound(TEXT("Music/11 - Game Over - Noriyuki Iwadare.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 DrawImage(0, 0, overImg);
-                DrawString (350, 244, point_Over.c_str(), "Arcade Normal", 20, White, true);
+                DrawString (410, 244, point_Over.c_str(), "Arcade Normal", 20, White, true);
                 Wait(5000);
                 Clear(Black);
                 bool v = replay();
@@ -620,10 +620,11 @@ void playSound(int livello, int contatore, bool isChanged[]) {
     
 }
 
-void win() {
+void win(string point_Over) {
     Image Win = LoadImage("Assets/win.png");
     DrawImage(0, 0, Win);
     PlaySound(TEXT("Music/win.wav"), NULL, SND_FILENAME | SND_ASYNC);
+    DrawString(420, 300, point_Over.c_str(), "Arcade Normal", 22, White, true);
     Wait(5000);
     PlaySound(NULL, NULL, SND_FILENAME);
 }
